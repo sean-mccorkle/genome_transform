@@ -23,16 +23,16 @@ module genome_transform {
 	
 	/* Input parameters for the "genbank_to_genome" function.
 	
-		shock_ref shock_ref - optional URL to genbank file stored in Shock
-		file_path file_path - optional path to genbank file on local file system
+		shock_ref genbank_shock_ref - optional URL to genbank file stored in Shock
+		file_path genbank_file_path - optional path to genbank file on local file system
 		workspace_id workspace - workspace where object will be saved
 		object_id genome_id - workspace ID to which the genome object should be saved 
 		object_id contigset_id - workspace ID to which the contigs should be saved
 			
 	*/
 	typedef structure {
-		shock_ref shock_ref;
-		file_path file_path;
+		shock_ref genbank_shock_ref;
+		file_path genbank_file_path;
 		
 		workspace_id workspace	
 		object_id genome_id;
