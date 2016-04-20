@@ -74,7 +74,7 @@ module genome_transform {
 		workspace_id workspace;
 		object_id genome_id;
 		object_id contigset_id;
-   } gff_to_genome;
+   } gff_to_genome_params;
 
-   funcdef genome_transform_script(file_path, file_type) returns (object_id report_id) authentication required;
+   funcdef gff_to_genome(gff_to_genome_params) returns (object_id report_id) authentication required;
 };
