@@ -1,0 +1,54 @@
+#
+# define display information
+#
+name: GenBank to genome
+tooltip: |
+    Transform GenBank files into KBase genome objects
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            [annotate_contigset]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    genbank_shock_ref :
+        ui-name : URL to GenBank file in Shock
+        short-hint : URL to GenBank file in Shock
+        long-hint  : URL to GenBank file in Shock
+    genbank_file_path:
+        ui-name : Path to file containing genbank file on local file system
+        short-hint : Path to file containing genbank file on local file system
+    genbank_file_path:
+        ui-name : Path to file containing genbank file on local file system
+        short-hint : Path to file containing genbank file on local file system
+    genome_id:
+        ui-name : Name of the genome or id of the genome
+        short-hint : Name of the genome or id of the genome
+    contigset_id:
+        ui-name : Name of the contig set or id of the contig set
+        short-hint : Name of the contig set or id of the contig set
+    workspace:
+        ui-name : Name of the workspace where genome object will be saved
+        short-hint : Name of the workspace where genome object will be saved
+
+
+
+
+description : |
+    <p>This is a simple method designed to illustrate the KBase SDK.</p>
