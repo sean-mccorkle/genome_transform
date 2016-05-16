@@ -140,21 +140,36 @@ public class GenomeTransformClient {
     }
 
     /**
-     * <p>Original spec-file function name: genome_transform_script</p>
+     * <p>Original spec-file function name: genbank_to_genome</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of original type "file_path" (A string representing the flie path)
-     * @param   arg2   instance of original type "file_type" (String represent the file_type)
-     * @return   instance of type {@link us.kbase.genometransform.GenomeObject GenomeObject}
+     * @param   arg1   instance of type {@link us.kbase.genometransform.GenbankToGenomeParams GenbankToGenomeParams} (original type "genbank_to_genome_params")
+     * @return   parameter "report_id" of original type "object_id" (Name of an object in the KBase workspace)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public GenomeObject genomeTransformScript(String arg1, String arg2, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public String genbankToGenome(GenbankToGenomeParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
-        args.add(arg2);
-        TypeReference<List<GenomeObject>> retType = new TypeReference<List<GenomeObject>>() {};
-        List<GenomeObject> res = caller.jsonrpcCall("genome_transform.genome_transform_script", args, retType, true, true, jsonRpcContext);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("genome_transform.genbank_to_genome", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: gff_to_genome</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.genometransform.GffToGenomeParams GffToGenomeParams} (original type "gff_to_genome_params")
+     * @return   parameter "report_id" of original type "object_id" (Name of an object in the KBase workspace)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String gffToGenome(GffToGenomeParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("genome_transform.gff_to_genome", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 }

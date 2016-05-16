@@ -19,12 +19,20 @@ my $ctx = LocalCallContext->new($token, $auth_token->user_id);
 $genome_transform::genome_transformServer::CallContext = $ctx;
 my $impl = new genome_transform::genome_transformImpl();
 
+my $input;
 
-my $fp = "some_path";
-my $type = "genome";
+$input = {
+    genbank_file_path => "/kb/module/data/NC_003197.gbk",
+    genbank_shock_ref => "https://ci.kbase.us/services/shock-api",
+    workspace => "janakakbase:1455821214132",
+    genome_id => "NC_003197",
+    contigset_id => "NC_003197ContigSet"
+};
+
+#$input =[$sR,$fp,$ws, $gId, $conId];
 
 eval {
-my $ret =$impl->genome_transform_script($fp,$type);
+my $ret =$impl->genbank_to_genome($input);
 };
 
 
