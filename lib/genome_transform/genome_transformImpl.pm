@@ -30,14 +30,14 @@ sub new
     };
     bless $self, $class;
     #BEGIN_CONSTRUCTOR
-    
+
     my $config_file = $ENV{ KB_DEPLOYMENT_CONFIG };
     my $cfg = Config::IniFiles->new(-file=>$config_file);
     my $wsInstance = $cfg->val('genome_transform','workspace-url');
     die "no workspace-url defined" unless $wsInstance;
-    
+
     $self->{'workspace-url'} = $wsInstance;
-    
+
     #END_CONSTRUCTOR
 
     if ($self->can('_init_instance'))
@@ -51,9 +51,9 @@ sub new
 
 
 
-=head2 genome_transform_script
+=head2 genbank_to_genome
 
-  $return = $obj->genome_transform_script($file_path, $file_type)
+  $report_id = $obj->genbank_to_genome($genbank_to_genome_params)
 
 =over 4
 
@@ -62,14 +62,18 @@ sub new
 =begin html
 
 <pre>
-$file_path is a genome_transform.file_path
-$file_type is a genome_transform.file_type
-$return is a genome_transform.GenomeObject
+$genbank_to_genome_params is a genome_transform.genbank_to_genome_params
+$report_id is a genome_transform.object_id
+genbank_to_genome_params is a reference to a hash where the following keys are defined:
+	genbank_shock_ref has a value which is a genome_transform.shock_ref
+	genbank_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
+	contigset_id has a value which is a genome_transform.object_id
+shock_ref is a string
 file_path is a string
-file_type is a string
-GenomeObject is a reference to a hash where the following keys are defined:
-	file_path has a value which is a string
-	file_type has a value which is a string
+workspace_id is a string
+object_id is a string
 
 </pre>
 
@@ -77,14 +81,18 @@ GenomeObject is a reference to a hash where the following keys are defined:
 
 =begin text
 
-$file_path is a genome_transform.file_path
-$file_type is a genome_transform.file_type
-$return is a genome_transform.GenomeObject
+$genbank_to_genome_params is a genome_transform.genbank_to_genome_params
+$report_id is a genome_transform.object_id
+genbank_to_genome_params is a reference to a hash where the following keys are defined:
+	genbank_shock_ref has a value which is a genome_transform.shock_ref
+	genbank_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
+	contigset_id has a value which is a genome_transform.object_id
+shock_ref is a string
 file_path is a string
-file_type is a string
-GenomeObject is a reference to a hash where the following keys are defined:
-	file_path has a value which is a string
-	file_type has a value which is a string
+workspace_id is a string
+object_id is a string
 
 
 =end text
@@ -99,52 +107,151 @@ GenomeObject is a reference to a hash where the following keys are defined:
 
 =cut
 
-sub genome_transform_script
+sub genbank_to_genome
 {
     my $self = shift;
-    my($file_path, $file_type) = @_;
+    my($genbank_to_genome_params) = @_;
 
     my @_bad_arguments;
-    (!ref($file_path)) or push(@_bad_arguments, "Invalid type for argument \"file_path\" (value was \"$file_path\")");
-    (!ref($file_type)) or push(@_bad_arguments, "Invalid type for argument \"file_type\" (value was \"$file_type\")");
+    (ref($genbank_to_genome_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"genbank_to_genome_params\" (value was \"$genbank_to_genome_params\")");
     if (@_bad_arguments) {
-	my $msg = "Invalid arguments passed to genome_transform_script:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	my $msg = "Invalid arguments passed to genbank_to_genome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'genome_transform_script');
+							       method_name => 'genbank_to_genome');
     }
 
     my $ctx = $genome_transform::genome_transformServer::CallContext;
-    my($return);
-    #BEGIN genome_transform_script
+    my($report_id);
+    #BEGIN genbank_to_genome
 
-    #example GBK file
-    $file_path = "../data/NC_003197.gbk";
+    print $genbank_to_genome_params->{genbank_file_path};
+    print &Dumper ($genbank_to_genome_params);
 
-    open(my $fh, $file_path) || die "Could not open gbk file: $!";
+    my $file_path = $genbank_to_genome_params->{genbank_file_path};
+    my $workspace = $genbank_to_genome_params->{workspace};
+    my $genome_id = $genbank_to_genome_params->{genome_id};
+    my $contig_id = $genbank_to_genome_params->{contigset_id};
+
+    print "\n\n$file_path\t$workspace\t$genome_id\t$contig_id\n";
+
+
+    open(my $fh, $genbank_to_genome_params->{genbank_file_path}) || die "Could not open gbk file: $!";
     while (my $input = <$fh>){
         chomp $input;
-        print "$input\n";
+        #print "$input\n";
     }
 
-    print "file path  $file_path\n";
+    print "file path  $\n";
+################################
+system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name "$workspace"  --object_name "$genome_id" --contigset_object_name  "$contig_id" --input_directory "$file_path" --working_directory /kb/module/workdir/tmp/Genomes');
 
+#################################
     die;
     #intermediary output files could be write to
 
-    my $temp_0ut = "/kb/module/work/tmp/tempTF";
+   # my $temp_0ut = "/kb/module/work/tmp/tempTF";
 
 
-
-
-    #END genome_transform_script
+    #END genbank_to_genome
     my @_bad_returns;
-    (ref($return) eq 'HASH') or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
+    (!ref($report_id)) or push(@_bad_returns, "Invalid type for return variable \"report_id\" (value was \"$report_id\")");
     if (@_bad_returns) {
-	my $msg = "Invalid returns passed to genome_transform_script:\n" . join("", map { "\t$_\n" } @_bad_returns);
+	my $msg = "Invalid returns passed to genbank_to_genome:\n" . join("", map { "\t$_\n" } @_bad_returns);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'genome_transform_script');
+							       method_name => 'genbank_to_genome');
     }
-    return($return);
+    return($report_id);
+}
+
+
+
+
+=head2 gff_to_genome
+
+  $report_id = $obj->gff_to_genome($gff_to_genome_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$gff_to_genome_params is a genome_transform.gff_to_genome_params
+$report_id is a genome_transform.object_id
+gff_to_genome_params is a reference to a hash where the following keys are defined:
+	fasta_shock_ref has a value which is a genome_transform.shock_ref
+	gff_shock_ref has a value which is a genome_transform.shock_ref
+	gff_file_path has a value which is a genome_transform.file_path
+	fasta_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
+	contigset_id has a value which is a genome_transform.object_id
+shock_ref is a string
+file_path is a string
+workspace_id is a string
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$gff_to_genome_params is a genome_transform.gff_to_genome_params
+$report_id is a genome_transform.object_id
+gff_to_genome_params is a reference to a hash where the following keys are defined:
+	fasta_shock_ref has a value which is a genome_transform.shock_ref
+	gff_shock_ref has a value which is a genome_transform.shock_ref
+	gff_file_path has a value which is a genome_transform.file_path
+	fasta_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
+	contigset_id has a value which is a genome_transform.object_id
+shock_ref is a string
+file_path is a string
+workspace_id is a string
+object_id is a string
+
+
+=end text
+
+
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub gff_to_genome
+{
+    my $self = shift;
+    my($gff_to_genome_params) = @_;
+
+    my @_bad_arguments;
+    (ref($gff_to_genome_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"gff_to_genome_params\" (value was \"$gff_to_genome_params\")");
+    if (@_bad_arguments) {
+	my $msg = "Invalid arguments passed to gff_to_genome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'gff_to_genome');
+    }
+
+    my $ctx = $genome_transform::genome_transformServer::CallContext;
+    my($report_id);
+    #BEGIN gff_to_genome
+    #END gff_to_genome
+    my @_bad_returns;
+    (!ref($report_id)) or push(@_bad_returns, "Invalid type for return variable \"report_id\" (value was \"$report_id\")");
+    if (@_bad_returns) {
+	my $msg = "Invalid returns passed to gff_to_genome:\n" . join("", map { "\t$_\n" } @_bad_returns);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'gff_to_genome');
+    }
+    return($report_id);
 }
 
 
@@ -188,6 +295,37 @@ sub version {
 
 
 
+=head2 shock_ref
+
+=over 4
+
+
+
+=item Description
+
+URL to a shock node containing a data file for upload
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 file_path
 
 =over 4
@@ -196,7 +334,7 @@ sub version {
 
 =item Description
 
-A string representing the flie path
+Path to a file containing a data file for upload on the local filesystem
 
 
 =item Definition
@@ -227,7 +365,7 @@ a string
 
 =item Description
 
-String represent the file_type
+Type to a file containing a data file for upload on the local filesystem
 
 
 =item Definition
@@ -250,10 +388,114 @@ a string
 
 
 
-=head2 GenomeObject
+=head2 object_id
 
 =over 4
 
+
+
+=item Description
+
+Name of an object in the KBase workspace
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 report_id
+
+=over 4
+
+
+
+=item Description
+
+Name of an report id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 workspace_id
+
+=over 4
+
+
+
+=item Description
+
+Name of a KBase workspace
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 genbank_to_genome_params
+
+=over 4
+
+
+
+=item Description
+
+Input parameters for the "genbank_to_genome" function.
+
+                shock_ref genbank_shock_ref - optional URL to genbank file stored in Shock
+                file_path genbank_file_path - optional path to genbank file on local file system
+                workspace_id workspace - workspace where object will be saved
+                object_id genome_id - workspace ID to which the genome object should be saved
+                object_id contigset_id - workspace ID to which the contigs should be saved
 
 
 =item Definition
@@ -262,8 +504,11 @@ a string
 
 <pre>
 a reference to a hash where the following keys are defined:
-file_path has a value which is a string
-file_type has a value which is a string
+genbank_shock_ref has a value which is a genome_transform.shock_ref
+genbank_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
+contigset_id has a value which is a genome_transform.object_id
 
 </pre>
 
@@ -272,8 +517,64 @@ file_type has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-file_path has a value which is a string
-file_type has a value which is a string
+genbank_shock_ref has a value which is a genome_transform.shock_ref
+genbank_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
+contigset_id has a value which is a genome_transform.object_id
+
+
+=end text
+
+=back
+
+
+
+=head2 gff_to_genome_params
+
+=over 4
+
+
+
+=item Description
+
+Input parameters for the "genbank_to_genome" function.
+
+                shock_ref shock_ref - optional URL to genbank file stored in Shock
+                file_path file_path - optional path to genbank file on local file system
+                workspace_id workspace - workspace where object will be saved
+                object_id genome_id - workspace ID to which the genome object should be saved
+                object_id contigset_id - workspace ID to which the contigs should be saved
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+fasta_shock_ref has a value which is a genome_transform.shock_ref
+gff_shock_ref has a value which is a genome_transform.shock_ref
+gff_file_path has a value which is a genome_transform.file_path
+fasta_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
+contigset_id has a value which is a genome_transform.object_id
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+fasta_shock_ref has a value which is a genome_transform.shock_ref
+gff_shock_ref has a value which is a genome_transform.shock_ref
+gff_file_path has a value which is a genome_transform.file_path
+fasta_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
+contigset_id has a value which is a genome_transform.object_id
 
 
 =end text

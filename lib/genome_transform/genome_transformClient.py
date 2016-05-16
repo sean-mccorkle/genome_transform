@@ -171,10 +171,17 @@ class genome_transform(object):
             raise ServerError('Unknown', 0, 'An unknown server error occurred')
         return resp['result']
  
-    def genome_transform_script(self, file_path, file_type, json_rpc_context = None):
+    def genbank_to_genome(self, genbank_to_genome_params, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
-            raise ValueError('Method genome_transform_script: argument json_rpc_context is not type dict as required.')
-        resp = self._call('genome_transform.genome_transform_script',
-                          [file_path, file_type], json_rpc_context)
+            raise ValueError('Method genbank_to_genome: argument json_rpc_context is not type dict as required.')
+        resp = self._call('genome_transform.genbank_to_genome',
+                          [genbank_to_genome_params], json_rpc_context)
+        return resp[0]
+  
+    def gff_to_genome(self, gff_to_genome_params, json_rpc_context = None):
+        if json_rpc_context and type(json_rpc_context) is not dict:
+            raise ValueError('Method gff_to_genome: argument json_rpc_context is not type dict as required.')
+        resp = self._call('genome_transform.gff_to_genome',
+                          [gff_to_genome_params], json_rpc_context)
         return resp[0]
  

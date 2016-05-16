@@ -28,37 +28,49 @@ has 'local_headers' => (is => 'ro', isa => 'HashRef');
 our $CallContext;
 
 our %return_counts = (
-        'genome_transform_script' => 1,
-        'genome_transform_script_async' => 1,
-        'genome_transform_script_check' => 1,
+        'genbank_to_genome' => 1,
+        'genbank_to_genome_async' => 1,
+        'genbank_to_genome_check' => 1,
+        'gff_to_genome' => 1,
+        'gff_to_genome_async' => 1,
+        'gff_to_genome_check' => 1,
         'version' => 1,
 );
 
 our %method_authentication = (
-        'genome_transform_script' => 'required',
-        'genome_transform_script_async' => 'required',
-        'genome_transform_script_check' => 'required',
+        'genbank_to_genome' => 'required',
+        'genbank_to_genome_async' => 'required',
+        'genbank_to_genome_check' => 'required',
+        'gff_to_genome' => 'required',
+        'gff_to_genome_async' => 'required',
+        'gff_to_genome_check' => 'required',
 );
 
 our %sync_methods = (
-        'genome_transform_script' => 1,
+        'genbank_to_genome' => 1,
+        'gff_to_genome' => 1,
 );
 
 our %async_run_methods = (
-        'genome_transform_script_async' => 'genome_transform.genome_transform_script',
+        'genbank_to_genome_async' => 'genome_transform.genbank_to_genome',
+        'gff_to_genome_async' => 'genome_transform.gff_to_genome',
 );
 
 our %async_check_methods = (
-        'genome_transform_script_check' => 'genome_transform.genome_transform_script',
+        'genbank_to_genome_check' => 'genome_transform.genbank_to_genome',
+        'gff_to_genome_check' => 'genome_transform.gff_to_genome',
 );
 
 sub _build_valid_methods
 {
     my($self) = @_;
     my $methods = {
-        'genome_transform_script' => 1,
-        'genome_transform_script_async' => 1,
-        'genome_transform_script_check' => 1,
+        'genbank_to_genome' => 1,
+        'genbank_to_genome_async' => 1,
+        'genbank_to_genome_check' => 1,
+        'gff_to_genome' => 1,
+        'gff_to_genome_async' => 1,
+        'gff_to_genome_check' => 1,
         'version' => 1,
     };
     return $methods;
