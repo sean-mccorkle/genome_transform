@@ -12,28 +12,6 @@
     },
     "parameters": [
         {
-            "id" : "workspace",
-            "optional" : false,
-            "advanced" : false,
-            "allow_multiple" : false,
-            "default_values" : [ "" ],
-            "field_type" : "workspace",
-            "text_options" : {
-                "valid_ws_types" : [ ]
-            }
-        },
-        {
-            "id" : "genbank_shock_ref",
-            "optional" : true,
-            "advanced" : false,
-            "allow_multiple" : false,
-            "default_values" : [ "" ],
-            "field_type" : "shock",
-            "text_options" : {
-                "valid_ws_types" : [ ]
-            }
-        },
-        {
             "id" : "genbank_file_path",
             "optional" : true,
             "advanced" : false,
@@ -52,19 +30,19 @@
             "default_values" : [ "" ],
             "field_type" : "text",
             "text_options" : {
-                "valid_ws_types" : [ "KBaseGenomes.Genome" ],
+                "valid_ws_types" : [ ],
                 "is_output_name" : true
             }
         },
         {
             "id" : "contigset_id",
-            "optional" : false,
+            "optional" : true,
             "advanced" : false,
             "allow_multiple" : false,
             "default_values" : [ "" ],
             "field_type" : "text",
             "text_options" : {
-                "valid_ws_types" : [ "KBaseGenomes.ContigSet" ],
+                "valid_ws_types" : [ ],
                 "is_output_name" : true
             }
         }
@@ -76,7 +54,7 @@
             "method": "genbank_to_genome",
             "input_mapping": [
                 {
-                    "input_parameter": "workspace",
+                    "narrative_system_variable": "workspace",
                     "target_property": "workspace"
                 },
                 {
@@ -88,18 +66,14 @@
                     "target_property": "contigset_id"
                 },
                 {
-                    "input_parameter": "genbank_shock_ref",
-                    "target_property": "genbank_shock_ref"
-                },
-                {
                     "input_parameter": "genbank_file_path",
                     "target_property": "genbank_file_path"
                 }
             ],
             "output_mapping": [
                 {
-                  "input_parameter": "workspace",
-                  "target_property": "workspace"
+                  "narrative_system_variable": "workspace",
+                  "target_property": "ws"
                 },
                 {
                     "service_method_output_path": [0],

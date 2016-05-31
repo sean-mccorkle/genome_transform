@@ -22,7 +22,7 @@ my $impl = new genome_transform::genome_transformImpl();
 my $input;
 
 $input = {
-    genbank_file_path => "/kb/module/data/NC_003197.gbk",
+    genbank_file_path => "/kb/module/data/bulktest/data/bulktest/janakakbase/",
     genbank_shock_ref => "https://ci.kbase.us/services/shock-api",
     workspace => "janakakbase:1455821214132",
     genome_id => "NC_003197",
