@@ -112,7 +112,7 @@ sub new
 
 =head2 genbank_to_genome
 
-  $report_id = $obj->genbank_to_genome($genbank_to_genome_params)
+  $return = $obj->genbank_to_genome($genbank_to_genome_params)
 
 =over 4
 
@@ -122,7 +122,7 @@ sub new
 
 <pre>
 $genbank_to_genome_params is a genome_transform.genbank_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 genbank_to_genome_params is a reference to a hash where the following keys are defined:
 	genbank_shock_ref has a value which is a genome_transform.shock_ref
 	genbank_file_path has a value which is a genome_transform.file_path
@@ -141,7 +141,7 @@ object_id is a string
 =begin text
 
 $genbank_to_genome_params is a genome_transform.genbank_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 genbank_to_genome_params is a reference to a hash where the following keys are defined:
 	genbank_shock_ref has a value which is a genome_transform.shock_ref
 	genbank_file_path has a value which is a genome_transform.file_path
@@ -213,7 +213,7 @@ object_id is a string
 
 =head2 gff_to_genome
 
-  $report_id = $obj->gff_to_genome($gff_to_genome_params)
+  $return = $obj->gff_to_genome($gff_to_genome_params)
 
 =over 4
 
@@ -223,7 +223,7 @@ object_id is a string
 
 <pre>
 $gff_to_genome_params is a genome_transform.gff_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 gff_to_genome_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
 	gff_shock_ref has a value which is a genome_transform.shock_ref
@@ -244,7 +244,7 @@ object_id is a string
 =begin text
 
 $gff_to_genome_params is a genome_transform.gff_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 gff_to_genome_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
 	gff_shock_ref has a value which is a genome_transform.shock_ref

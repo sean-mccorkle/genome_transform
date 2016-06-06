@@ -53,7 +53,7 @@ sub new
 
 =head2 genbank_to_genome
 
-  $report_id = $obj->genbank_to_genome($genbank_to_genome_params)
+  $return = $obj->genbank_to_genome($genbank_to_genome_params)
 
 =over 4
 
@@ -63,7 +63,7 @@ sub new
 
 <pre>
 $genbank_to_genome_params is a genome_transform.genbank_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 genbank_to_genome_params is a reference to a hash where the following keys are defined:
 	genbank_shock_ref has a value which is a genome_transform.shock_ref
 	genbank_file_path has a value which is a genome_transform.file_path
@@ -82,7 +82,7 @@ object_id is a string
 =begin text
 
 $genbank_to_genome_params is a genome_transform.genbank_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 genbank_to_genome_params is a reference to a hash where the following keys are defined:
 	genbank_shock_ref has a value which is a genome_transform.shock_ref
 	genbank_file_path has a value which is a genome_transform.file_path
@@ -121,7 +121,7 @@ sub genbank_to_genome
     }
 
     my $ctx = $genome_transform::genome_transformServer::CallContext;
-    my($report_id);
+    my($return);
     #BEGIN genbank_to_genome
 
     print $genbank_to_genome_params->{genbank_file_path};
@@ -142,23 +142,23 @@ system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id --contigset_object_name  $contig_id --input_directory $file_path --working_directory /kb/module/workdir/tmp/Genomes');
 
 #################################
-    die;
+
     #intermediary output files could be write to
 
    # my $temp_0ut = "/kb/module/work/tmp/tempTF";
 
-    $report_id = {'file path input hash' => $genome_id};
-
+    #$return = {'file path input hash' => $genome_id};
+    $return = $genome_id;
 
     #END genbank_to_genome
     my @_bad_returns;
-    (!ref($report_id)) or push(@_bad_returns, "Invalid type for return variable \"report_id\" (value was \"$report_id\")");
+    (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
     if (@_bad_returns) {
 	my $msg = "Invalid returns passed to genbank_to_genome:\n" . join("", map { "\t$_\n" } @_bad_returns);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 							       method_name => 'genbank_to_genome');
     }
-    return($report_id);
+    return($return);
 }
 
 
@@ -166,7 +166,7 @@ system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome
 
 =head2 gff_to_genome
 
-  $report_id = $obj->gff_to_genome($gff_to_genome_params)
+  $return = $obj->gff_to_genome($gff_to_genome_params)
 
 =over 4
 
@@ -176,7 +176,7 @@ system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome
 
 <pre>
 $gff_to_genome_params is a genome_transform.gff_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 gff_to_genome_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
 	gff_shock_ref has a value which is a genome_transform.shock_ref
@@ -197,7 +197,7 @@ object_id is a string
 =begin text
 
 $gff_to_genome_params is a genome_transform.gff_to_genome_params
-$report_id is a genome_transform.object_id
+$return is a genome_transform.object_id
 gff_to_genome_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
 	gff_shock_ref has a value which is a genome_transform.shock_ref
@@ -238,17 +238,17 @@ sub gff_to_genome
     }
 
     my $ctx = $genome_transform::genome_transformServer::CallContext;
-    my($report_id);
+    my($return);
     #BEGIN gff_to_genome
     #END gff_to_genome
     my @_bad_returns;
-    (!ref($report_id)) or push(@_bad_returns, "Invalid type for return variable \"report_id\" (value was \"$report_id\")");
+    (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
     if (@_bad_returns) {
 	my $msg = "Invalid returns passed to gff_to_genome:\n" . join("", map { "\t$_\n" } @_bad_returns);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 							       method_name => 'gff_to_genome');
     }
-    return($report_id);
+    return($return);
 }
 
 

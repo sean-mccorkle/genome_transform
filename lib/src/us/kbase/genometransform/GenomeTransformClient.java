@@ -144,7 +144,7 @@ public class GenomeTransformClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.genometransform.GenbankToGenomeParams GenbankToGenomeParams} (original type "genbank_to_genome_params")
-     * @return   parameter "report_id" of original type "object_id" (Name of an object in the KBase workspace)
+     * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
@@ -161,7 +161,7 @@ public class GenomeTransformClient {
      * <pre>
      * </pre>
      * @param   arg1   instance of type {@link us.kbase.genometransform.GffToGenomeParams GffToGenomeParams} (original type "gff_to_genome_params")
-     * @return   parameter "report_id" of original type "object_id" (Name of an object in the KBase workspace)
+     * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */

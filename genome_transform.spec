@@ -54,7 +54,7 @@ module genome_transform {
 		object_id contigset_id;
    } genbank_to_genome_params;
 
-   funcdef genbank_to_genome(genbank_to_genome_params) returns (object_id report_id) authentication required;
+   funcdef genbank_to_genome(genbank_to_genome_params) returns (object_id) authentication required;
 
    /* Input parameters for the "genbank_to_genome" function.
 
@@ -76,5 +76,5 @@ module genome_transform {
 		object_id contigset_id;
    } gff_to_genome_params;
 
-   funcdef gff_to_genome(gff_to_genome_params) returns (object_id report_id) authentication required;
+   funcdef gff_to_genome(gff_to_genome_params) returns (object_id) authentication required;
 };
