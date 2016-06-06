@@ -135,16 +135,19 @@ sub genbank_to_genome
     print "\n\n$file_path\t$workspace\t$genome_id\t$contig_id\n";
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
-    print "full file path  $file_path\n relative file path $relative_fp\n";
+    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n";
 ################################
-system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /data/bulktest/data/bulktest/janakakbase/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id --contigset_object_name  $contig_id --input_directory $file_path --working_directory /kb/module/workdir/tmp/Genomes');
 
 #################################
-    #die;
+    die;
     #intermediary output files could be write to
 
    # my $temp_0ut = "/kb/module/work/tmp/tempTF";
+
+    $report_id = {'file path input hash' => $genome_id};
 
 
     #END genbank_to_genome

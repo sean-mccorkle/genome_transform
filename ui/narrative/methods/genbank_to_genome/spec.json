@@ -76,8 +76,8 @@
                   "target_property": "ws"
                 },
                 {
-                    "service_method_output_path": [0],
-                    "target_property": "report_name"
+                    "input_parameter": "genbank_file_path",
+                    "target_property": "id"
                 },
                 {
                     "constant_value": "16",
