@@ -23,8 +23,8 @@ my $input;
 
 $input = {
     genbank_file_path => "/kb/module/data/bulktest/data/bulktest/janakakbase/",
-    genbank_shock_ref => "https://ci.kbase.us/services/shock-api",
-    workspace => "janakakbase:1455821214132",
+    genbank_shock_ref => "https://appdev.kbase.us/services/shock-api",
+    workspace => "janakakbase:1464032798535",
     genome_id => "NC_003197",
     contigset_id => "NC_003197ContigSet"
 };

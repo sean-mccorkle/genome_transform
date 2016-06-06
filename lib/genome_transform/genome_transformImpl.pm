@@ -133,18 +133,12 @@ sub genbank_to_genome
     my $contig_id = $genbank_to_genome_params->{contigset_id};
 
     print "\n\n$file_path\t$workspace\t$genome_id\t$contig_id\n";
+    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
-=head
-    open(my $fh, $genbank_to_genome_params->{genbank_file_path}) || die "Could not open gbk file: $!";
-    while (my $input = <$fh>){
-        chomp $input;
-        #print "$input\n";
-    }
-=cut
-    print "file path  $file_path\n";
+    print "full file path  $file_path\n relative file path $relative_fp\n";
 ################################
-#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /data/bulktest/data/bulktest/janakakbase/ --working_directory /kb/module/workdir/tmp/Genomes');
-system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id --contigset_object_name  $contig_id --input_directory $file_path --working_directory /kb/module/workdir/tmp/Genomes');
+system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /data/bulktest/data/bulktest/janakakbase/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome --shock_service_url  https://appdev.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id --contigset_object_name  $contig_id --input_directory $file_path --working_directory /kb/module/workdir/tmp/Genomes');
 
 #################################
     #die;
