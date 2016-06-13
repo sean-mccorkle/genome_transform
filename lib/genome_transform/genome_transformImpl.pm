@@ -250,7 +250,7 @@ sub fasta_to_contig
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 
-system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --output_file_name  $contig_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
 
 #################################
 my $contig_set = /kb/module/workdir/tmp/Genomes/$contig_id;
@@ -359,6 +359,44 @@ sub tsv_to_exp
     my $ctx = $genome_transform::genome_transformServer::CallContext;
     my($return);
     #BEGIN tsv_to_exp
+
+
+    my $file_path = $genbank_to_genome_params->{tsvexp_file_path};
+    my $workspace = $genbank_to_genome_params->{workspace};
+    my $genome_id = $genbank_to_genome_params->{genome_id};
+    my $exp_id = $genbank_to_genome_params->{expMaxId};
+
+    $genome_id = $genome_id."";
+
+    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
+
+    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
+
+################################
+#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+
+system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+
+#################################
+my $exp_ob = /kb/module/workdir/tmp/Genomes/$exp_id;
+    my $obj_info_list = undef;
+        eval {
+            $obj_info_list = $wsClient->save_objects({
+                'workspace'=>$workspace_name,
+                'objects'=>[{
+                'type'=>'KBaseGenomes.ContigSet',
+                'data'=>$exp_ob,
+                'name'=>$genome_id,
+                'provenance'=>$provenance
+            }]
+        });
+    };
+    if ($@) {
+        die "Error saving modified genome object to workspace:\n".$@;
+    }
+
+
     #END tsv_to_exp
     my @_bad_returns;
     (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");

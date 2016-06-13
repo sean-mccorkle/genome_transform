@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: GenBank to genome
+name: FastA to Contig
 tooltip: |
-    Transform GenBank files into KBase genome objects
+    FastA to Contig
 screenshots: []
 
 icon: icon.png

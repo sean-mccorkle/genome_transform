@@ -34,7 +34,7 @@ module genome_transform {
 	*/
 	typedef string workspace_id;
 
-	/* 
+	/*
         Input parameters for the "genbank_to_genome" function.
 
 		shock_ref genbank_shock_ref - optional URL to genbank file stored in Shock
@@ -57,7 +57,7 @@ module genome_transform {
 
    funcdef genbank_to_genome(genbank_to_genome_params) returns (object_id) authentication required;
 
-   /* 
+   /*
         Input parameters for the "fasta_to_contig" function.
 
 		shock_ref shock_ref - optional URL to fasta file stored in Shock
@@ -78,7 +78,7 @@ module genome_transform {
 
    funcdef fasta_to_contig(fasta_to_contig_params) returns (object_id) authentication required;
 
-   /* 
+   /*
         Input parameters for the "exp tsv to exp matirx" function.
 
 		shock_ref shock_ref - optional URL to genbank file stored in Shock
@@ -93,6 +93,7 @@ module genome_transform {
 		file_path tsvexp_file_path;
 
 		workspace_id workspace;
+		object_id genome_id;
 		object_id expMaxId;
    }tsv_to_exp_params;
 
