@@ -25,14 +25,14 @@ $input = {
     genbank_file_path => '/kb/module/data/',
     genbank_shock_ref => 'https://ci.kbase.us/services/shock-api',
     workspace => 'janakakbase:1464032798535',
-    genome_id => 'NC_003197',
-    contigset_id => 'NC_003197ContigSet'
+    genome_id => 'fasciculatum',
+    contigset_id => 'fasciculatum_ContigSet'
 };
 
 #$input =[$sR,$fp,$ws, $gId, $conId];
 
 eval {
-my $ret =$impl->genbank_to_genome($input);
+my $ret =$impl->fasta_to_contig($input);
 };
 
 

@@ -31,9 +31,12 @@ our %return_counts = (
         'genbank_to_genome' => 1,
         'genbank_to_genome_async' => 1,
         'genbank_to_genome_check' => 1,
-        'gff_to_genome' => 1,
-        'gff_to_genome_async' => 1,
-        'gff_to_genome_check' => 1,
+        'fasta_to_contig' => 1,
+        'fasta_to_contig_async' => 1,
+        'fasta_to_contig_check' => 1,
+        'tsv_to_exp' => 1,
+        'tsv_to_exp_async' => 1,
+        'tsv_to_exp_check' => 1,
         'version' => 1,
 );
 
@@ -41,24 +44,30 @@ our %method_authentication = (
         'genbank_to_genome' => 'required',
         'genbank_to_genome_async' => 'required',
         'genbank_to_genome_check' => 'required',
-        'gff_to_genome' => 'required',
-        'gff_to_genome_async' => 'required',
-        'gff_to_genome_check' => 'required',
+        'fasta_to_contig' => 'required',
+        'fasta_to_contig_async' => 'required',
+        'fasta_to_contig_check' => 'required',
+        'tsv_to_exp' => 'required',
+        'tsv_to_exp_async' => 'required',
+        'tsv_to_exp_check' => 'required',
 );
 
 our %sync_methods = (
         'genbank_to_genome' => 1,
-        'gff_to_genome' => 1,
+        'fasta_to_contig' => 1,
+        'tsv_to_exp' => 1,
 );
 
 our %async_run_methods = (
         'genbank_to_genome_async' => 'genome_transform.genbank_to_genome',
-        'gff_to_genome_async' => 'genome_transform.gff_to_genome',
+        'fasta_to_contig_async' => 'genome_transform.fasta_to_contig',
+        'tsv_to_exp_async' => 'genome_transform.tsv_to_exp',
 );
 
 our %async_check_methods = (
         'genbank_to_genome_check' => 'genome_transform.genbank_to_genome',
-        'gff_to_genome_check' => 'genome_transform.gff_to_genome',
+        'fasta_to_contig_check' => 'genome_transform.fasta_to_contig',
+        'tsv_to_exp_check' => 'genome_transform.tsv_to_exp',
 );
 
 sub _build_valid_methods
@@ -68,9 +77,12 @@ sub _build_valid_methods
         'genbank_to_genome' => 1,
         'genbank_to_genome_async' => 1,
         'genbank_to_genome_check' => 1,
-        'gff_to_genome' => 1,
-        'gff_to_genome_async' => 1,
-        'gff_to_genome_check' => 1,
+        'fasta_to_contig' => 1,
+        'fasta_to_contig_async' => 1,
+        'fasta_to_contig_check' => 1,
+        'tsv_to_exp' => 1,
+        'tsv_to_exp_async' => 1,
+        'tsv_to_exp_check' => 1,
         'version' => 1,
     };
     return $methods;

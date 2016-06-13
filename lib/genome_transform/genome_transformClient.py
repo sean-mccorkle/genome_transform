@@ -178,10 +178,17 @@ class genome_transform(object):
                           [genbank_to_genome_params], json_rpc_context)
         return resp[0]
   
-    def gff_to_genome(self, gff_to_genome_params, json_rpc_context = None):
+    def fasta_to_contig(self, fasta_to_contig_params, json_rpc_context = None):
         if json_rpc_context and type(json_rpc_context) is not dict:
-            raise ValueError('Method gff_to_genome: argument json_rpc_context is not type dict as required.')
-        resp = self._call('genome_transform.gff_to_genome',
-                          [gff_to_genome_params], json_rpc_context)
+            raise ValueError('Method fasta_to_contig: argument json_rpc_context is not type dict as required.')
+        resp = self._call('genome_transform.fasta_to_contig',
+                          [fasta_to_contig_params], json_rpc_context)
+        return resp[0]
+  
+    def tsv_to_exp(self, tsv_to_exp_params, json_rpc_context = None):
+        if json_rpc_context and type(json_rpc_context) is not dict:
+            raise ValueError('Method tsv_to_exp: argument json_rpc_context is not type dict as required.')
+        resp = self._call('genome_transform.tsv_to_exp',
+                          [tsv_to_exp_params], json_rpc_context)
         return resp[0]
  

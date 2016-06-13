@@ -211,9 +211,9 @@ object_id is a string
  
 
 
-=head2 gff_to_genome
+=head2 fasta_to_contig
 
-  $return = $obj->gff_to_genome($gff_to_genome_params)
+  $return = $obj->fasta_to_contig($fasta_to_contig_params)
 
 =over 4
 
@@ -222,12 +222,10 @@ object_id is a string
 =begin html
 
 <pre>
-$gff_to_genome_params is a genome_transform.gff_to_genome_params
+$fasta_to_contig_params is a genome_transform.fasta_to_contig_params
 $return is a genome_transform.object_id
-gff_to_genome_params is a reference to a hash where the following keys are defined:
+fasta_to_contig_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
-	gff_shock_ref has a value which is a genome_transform.shock_ref
-	gff_file_path has a value which is a genome_transform.file_path
 	fasta_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
 	genome_id has a value which is a genome_transform.object_id
@@ -243,12 +241,10 @@ object_id is a string
 
 =begin text
 
-$gff_to_genome_params is a genome_transform.gff_to_genome_params
+$fasta_to_contig_params is a genome_transform.fasta_to_contig_params
 $return is a genome_transform.object_id
-gff_to_genome_params is a reference to a hash where the following keys are defined:
+fasta_to_contig_params is a reference to a hash where the following keys are defined:
 	fasta_shock_ref has a value which is a genome_transform.shock_ref
-	gff_shock_ref has a value which is a genome_transform.shock_ref
-	gff_file_path has a value which is a genome_transform.file_path
 	fasta_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
 	genome_id has a value which is a genome_transform.object_id
@@ -269,7 +265,7 @@ object_id is a string
 
 =cut
 
- sub gff_to_genome
+ sub fasta_to_contig
 {
     my($self, @args) = @_;
 
@@ -278,38 +274,137 @@ object_id is a string
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function gff_to_genome (received $n, expecting 1)");
+							       "Invalid argument count for function fasta_to_contig (received $n, expecting 1)");
     }
     {
-	my($gff_to_genome_params) = @args;
+	my($fasta_to_contig_params) = @args;
 
 	my @_bad_arguments;
-        (ref($gff_to_genome_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"gff_to_genome_params\" (value was \"$gff_to_genome_params\")");
+        (ref($fasta_to_contig_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"fasta_to_contig_params\" (value was \"$fasta_to_contig_params\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to gff_to_genome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to fasta_to_contig:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'gff_to_genome');
+								   method_name => 'fasta_to_contig');
 	}
     }
 
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.gff_to_genome",
+	method => "genome_transform.fasta_to_contig",
 	params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'gff_to_genome',
+					       method_name => 'fasta_to_contig',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method gff_to_genome",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method fasta_to_contig",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'gff_to_genome',
+					    method_name => 'fasta_to_contig',
+				       );
+    }
+}
+ 
+
+
+=head2 tsv_to_exp
+
+  $return = $obj->tsv_to_exp($tsv_to_exp_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$tsv_to_exp_params is a genome_transform.tsv_to_exp_params
+$return is a genome_transform.object_id
+tsv_to_exp_params is a reference to a hash where the following keys are defined:
+	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
+	tsvexp_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	expMaxId has a value which is a genome_transform.object_id
+shock_ref is a string
+file_path is a string
+workspace_id is a string
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$tsv_to_exp_params is a genome_transform.tsv_to_exp_params
+$return is a genome_transform.object_id
+tsv_to_exp_params is a reference to a hash where the following keys are defined:
+	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
+	tsvexp_file_path has a value which is a genome_transform.file_path
+	workspace has a value which is a genome_transform.workspace_id
+	expMaxId has a value which is a genome_transform.object_id
+shock_ref is a string
+file_path is a string
+workspace_id is a string
+object_id is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub tsv_to_exp
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function tsv_to_exp (received $n, expecting 1)");
+    }
+    {
+	my($tsv_to_exp_params) = @args;
+
+	my @_bad_arguments;
+        (ref($tsv_to_exp_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"tsv_to_exp_params\" (value was \"$tsv_to_exp_params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to tsv_to_exp:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'tsv_to_exp');
+	}
+    }
+
+    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
+	method => "genome_transform.tsv_to_exp",
+	params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'tsv_to_exp',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method tsv_to_exp",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'tsv_to_exp',
 				       );
     }
 }
@@ -327,16 +422,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'gff_to_genome',
+                method_name => 'tsv_to_exp',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method gff_to_genome",
+            error => "Error invoking method tsv_to_exp",
             status_line => $self->{client}->status_line,
-            method_name => 'gff_to_genome',
+            method_name => 'tsv_to_exp',
         );
     }
 }
@@ -569,11 +664,11 @@ a string
 
 Input parameters for the "genbank_to_genome" function.
 
-                shock_ref genbank_shock_ref - optional URL to genbank file stored in Shock
-                file_path genbank_file_path - optional path to genbank file on local file system
-                workspace_id workspace - workspace where object will be saved
-                object_id genome_id - workspace ID to which the genome object should be saved
-                object_id contigset_id - workspace ID to which the contigs should be saved
+        shock_ref genbank_shock_ref - optional URL to genbank file stored in Shock
+        file_path genbank_file_path - optional path to genbank file on local file system
+        workspace_id workspace - workspace where object will be saved
+        object_id genome_id - workspace ID to which the genome object should be saved
+        object_id contigset_id - workspace ID to which the contigs should be saved
 
 
 =item Definition
@@ -608,7 +703,7 @@ contigset_id has a value which is a genome_transform.object_id
 
 
 
-=head2 gff_to_genome_params
+=head2 fasta_to_contig_params
 
 =over 4
 
@@ -616,13 +711,13 @@ contigset_id has a value which is a genome_transform.object_id
 
 =item Description
 
-Input parameters for the "genbank_to_genome" function.
+Input parameters for the "fasta_to_contig" function.
 
-                shock_ref shock_ref - optional URL to genbank file stored in Shock
-                file_path file_path - optional path to genbank file on local file system
-                workspace_id workspace - workspace where object will be saved
-                object_id genome_id - workspace ID to which the genome object should be saved
-                object_id contigset_id - workspace ID to which the contigs should be saved
+        shock_ref shock_ref - optional URL to fasta file stored in Shock
+        file_path file_path - optional path to fasta file on local file system
+        workspace_id workspace - workspace where object will be saved
+        object_id genome_id - workspace ID to which the contigs object should be saved
+        object_id contigset_id - workspace ID to which the contigs should be saved
 
 
 =item Definition
@@ -632,8 +727,6 @@ Input parameters for the "genbank_to_genome" function.
 <pre>
 a reference to a hash where the following keys are defined:
 fasta_shock_ref has a value which is a genome_transform.shock_ref
-gff_shock_ref has a value which is a genome_transform.shock_ref
-gff_file_path has a value which is a genome_transform.file_path
 fasta_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
 genome_id has a value which is a genome_transform.object_id
@@ -647,12 +740,57 @@ contigset_id has a value which is a genome_transform.object_id
 
 a reference to a hash where the following keys are defined:
 fasta_shock_ref has a value which is a genome_transform.shock_ref
-gff_shock_ref has a value which is a genome_transform.shock_ref
-gff_file_path has a value which is a genome_transform.file_path
 fasta_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
 genome_id has a value which is a genome_transform.object_id
 contigset_id has a value which is a genome_transform.object_id
+
+
+=end text
+
+=back
+
+
+
+=head2 tsv_to_exp_params
+
+=over 4
+
+
+
+=item Description
+
+Input parameters for the "exp tsv to exp matirx" function.
+
+        shock_ref shock_ref - optional URL to genbank file stored in Shock
+        file_path file_path - optional path to genbank file on local file system
+        workspace_id workspace - workspace where object will be saved
+        object_id genome_id - workspace ID to which the genome object should be saved
+        object_id contigset_id - workspace ID to which the contigs should be saved
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+tsvexp_shock_ref has a value which is a genome_transform.shock_ref
+tsvexp_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+expMaxId has a value which is a genome_transform.object_id
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+tsvexp_shock_ref has a value which is a genome_transform.shock_ref
+tsvexp_file_path has a value which is a genome_transform.file_path
+workspace has a value which is a genome_transform.workspace_id
+expMaxId has a value which is a genome_transform.object_id
 
 
 =end text

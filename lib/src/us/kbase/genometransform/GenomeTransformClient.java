@@ -157,19 +157,36 @@ public class GenomeTransformClient {
     }
 
     /**
-     * <p>Original spec-file function name: gff_to_genome</p>
+     * <p>Original spec-file function name: fasta_to_contig</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of type {@link us.kbase.genometransform.GffToGenomeParams GffToGenomeParams} (original type "gff_to_genome_params")
+     * @param   arg1   instance of type {@link us.kbase.genometransform.FastaToContigParams FastaToContigParams} (original type "fasta_to_contig_params")
      * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public String gffToGenome(GffToGenomeParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public String fastaToContig(FastaToContigParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
-        List<String> res = caller.jsonrpcCall("genome_transform.gff_to_genome", args, retType, true, true, jsonRpcContext);
+        List<String> res = caller.jsonrpcCall("genome_transform.fasta_to_contig", args, retType, true, true, jsonRpcContext);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: tsv_to_exp</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.genometransform.TsvToExpParams TsvToExpParams} (original type "tsv_to_exp_params")
+     * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String tsvToExp(TsvToExpParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("genome_transform.tsv_to_exp", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 }
