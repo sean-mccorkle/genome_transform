@@ -27,7 +27,7 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    genbank_file_path:
+    fasta_file_path:
         ui-name : Path to file containing genbank file on local file system
         short-hint : Path to file containing genbank file on local file system
     genome_id:

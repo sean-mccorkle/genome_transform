@@ -21,6 +21,8 @@ use Bio::KBase::AuthToken;
 use Bio::KBase::workspace::Client;
 use Config::IniFiles;
 use Data::Dumper;
+use JSON;
+binmode STDOUT, ":utf8";
 #END_HEADER
 
 sub new
@@ -141,8 +143,8 @@ sub genbank_to_genome
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-
-system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+system ("ls /data/");
+system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
 
 #################################
 
@@ -235,12 +237,17 @@ sub fasta_to_contig
     my $ctx = $genome_transform::genome_transformServer::CallContext;
     my($return);
     #BEGIN fasta_to_contig
-    my $file_path = $genbank_to_genome_params->{fasta_file_path};
-    my $workspace = $genbank_to_genome_params->{workspace};
-    my $genome_id = $genbank_to_genome_params->{genome_id};
-    my $contig_id = $genbank_to_genome_params->{contigset_id};
+     my $token=$ctx->token;
+    my $provenance=$ctx->provenance;
+    my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
-    $genome_id = $genome_id."";
+    my $file_path = $fasta_to_contig_params->{fasta_file_path};
+    my $workspace = $fasta_to_contig_params->{workspace};
+    my $genome_id = $fasta_to_contig_params->{genome_id};
+    my $contig_id = $fasta_to_contig_params->{contigset_id};
+     print &Dumper ($fasta_to_contig_params);
+
+    #$contig_id = $contig_id."";
 
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
@@ -250,19 +257,33 @@ sub fasta_to_contig
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 
-system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --output_file_name  $contig_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
 
 #################################
-my $contig_set = /kb/module/workdir/tmp/Genomes/$contig_id;
+
+my $json;
+{
+  local $/; #Enable 'slurp' mode
+  open my $fh, "<", "/kb/module/work/tmp/Genomes/$contig_id";
+  $json = <$fh>;
+  close $fh;
+}
+#print &Dumper ($json);
+#die;
+
+my $contig_set = decode_json($json);
+
+
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'workspace'=>$workspace_name,
+                'workspace'=>$workspace,
                 'objects'=>[{
                 'type'=>'KBaseGenomes.ContigSet',
                 'data'=>$contig_set,
-                'name'=>$contig_id,
+                'name'=>$genome_id,
                 'provenance'=>$provenance
+
             }]
         });
     };
@@ -306,6 +327,7 @@ tsv_to_exp_params is a reference to a hash where the following keys are defined:
 	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 	tsvexp_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
 	expMaxId has a value which is a genome_transform.object_id
 shock_ref is a string
 file_path is a string
@@ -324,6 +346,7 @@ tsv_to_exp_params is a reference to a hash where the following keys are defined:
 	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 	tsvexp_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
 	expMaxId has a value which is a genome_transform.object_id
 shock_ref is a string
 file_path is a string
@@ -359,14 +382,15 @@ sub tsv_to_exp
     my $ctx = $genome_transform::genome_transformServer::CallContext;
     my($return);
     #BEGIN tsv_to_exp
+    my $token=$ctx->token;
+    my $provenance=$ctx->provenance;
+    my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
-
-    my $file_path = $genbank_to_genome_params->{tsvexp_file_path};
-    my $workspace = $genbank_to_genome_params->{workspace};
-    my $genome_id = $genbank_to_genome_params->{genome_id};
-    my $exp_id = $genbank_to_genome_params->{expMaxId};
-
-    $genome_id = $genome_id."";
+    my $file_path = $tsv_to_exp_params->{tsvexp_file_path};
+    my $workspace = $tsv_to_exp_params->{workspace};
+    my $genome_id = $tsv_to_exp_params->{genome_id};
+    my $exp_id = $tsv_to_exp_params->{expMaxId};
+    print &Dumper ($tsv_to_exp_params);
 
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
@@ -375,28 +399,40 @@ sub tsv_to_exp
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-
-system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://appdev.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
 
 #################################
-my $exp_ob = /kb/module/workdir/tmp/Genomes/$exp_id;
+
+
+my $json;
+
+{
+  local $/; #Enable 'slurp' mode
+  open my $fh, "<", "/kb/module/work/tmp/Genomes/$exp_id";
+  $json = <$fh>;
+  close $fh;
+}
+
+my $exp_ob = decode_json($json);
+    #print &Dumper ($exp_ob);
+
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'workspace'=>$workspace_name,
+                'workspace'=>$workspace,
                 'objects'=>[{
-                'type'=>'KBaseGenomes.ContigSet',
+                'type'=>'KBaseFeatureValues.ExpressionMatrix',
                 'data'=>$exp_ob,
                 'name'=>$genome_id,
                 'provenance'=>$provenance
-            }]
-        });
-    };
+                }]
+            });
+        };
     if ($@) {
         die "Error saving modified genome object to workspace:\n".$@;
     }
-
-
+     print &Dumper ($obj_info_list);
+    return $exp_id;
     #END tsv_to_exp
     my @_bad_returns;
     (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
@@ -759,6 +795,7 @@ a reference to a hash where the following keys are defined:
 tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 tsvexp_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
 expMaxId has a value which is a genome_transform.object_id
 
 </pre>
@@ -771,6 +808,7 @@ a reference to a hash where the following keys are defined:
 tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 tsvexp_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
 expMaxId has a value which is a genome_transform.object_id
 
 

@@ -22,19 +22,49 @@ my $impl = new genome_transform::genome_transformImpl();
 my $input;
 
 $input = {
-    genbank_file_path => '/kb/module/data/',
+    genbank_file_path => '/data/bulktest/data/bulktest/janakakbase/NC_003197.gbk',
     genbank_shock_ref => 'https://ci.kbase.us/services/shock-api',
+    workspace => 'janakakbase:1464032798535',
+    genome_id => 'NC_003197',
+    contigset_id => 'NC_003197Contig'
+};
+
+my $input_fasta;
+
+$input_fasta = {
+    fasta_file_path => '/kb/module/data/',
+    fasta_shock_ref => 'https://ci.kbase.us/services/shock-api',
     workspace => 'janakakbase:1464032798535',
     genome_id => 'fasciculatum',
     contigset_id => 'fasciculatum_ContigSet'
 };
 
-#$input =[$sR,$fp,$ws, $gId, $conId];
+my $input_exp;
 
-eval {
-my $ret =$impl->fasta_to_contig($input);
+$input_exp = {
+    tsvexp_file_path => '/kb/module/data/',
+    tsvexp_shock_ref => 'https://ci.kbase.us/services/shock-api',
+    workspace => 'janakakbase:1464032798535',
+    genome_id => 'acetobacterium',
+    expMaxId => 'AcetoExpMatrix'
 };
 
+#$input =[$sR,$fp,$ws, $gId, $conId];
+eval {
+my $ret =$impl->tsv_to_exp($input_exp);
+
+};
+
+
+eval {
+#my $ret =$impl->fasta_to_contig($input_fasta);
+
+};
+
+
+eval {
+    #my $ret =$impl->genbank_to_genome($input);
+};
 
 
 my $err = undef;

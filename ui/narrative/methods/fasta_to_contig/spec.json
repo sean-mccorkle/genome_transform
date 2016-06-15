@@ -12,7 +12,7 @@
     },
     "parameters": [
         {
-            "id" : "genbank_file_path",
+            "id" : "fasta_file_path",
             "optional" : true,
             "advanced" : false,
             "allow_multiple" : false,
@@ -66,8 +66,8 @@
                     "target_property": "contigset_id"
                 },
                 {
-                    "input_parameter": "genbank_file_path",
-                    "target_property": "genbank_file_path"
+                    "input_parameter": "fasta_file_path",
+                    "target_property": "fasta_file_path"
                 }
             ],
             "output_mapping": [
@@ -76,7 +76,7 @@
                   "target_property": "ws"
                 },
                 {
-                    "input_parameter": "genbank_file_path",
+                    "input_parameter": "fasta_file_path",
                     "target_property": "id"
                 },
                 {

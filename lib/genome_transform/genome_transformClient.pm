@@ -329,6 +329,7 @@ tsv_to_exp_params is a reference to a hash where the following keys are defined:
 	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 	tsvexp_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
 	expMaxId has a value which is a genome_transform.object_id
 shock_ref is a string
 file_path is a string
@@ -347,6 +348,7 @@ tsv_to_exp_params is a reference to a hash where the following keys are defined:
 	tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 	tsvexp_file_path has a value which is a genome_transform.file_path
 	workspace has a value which is a genome_transform.workspace_id
+	genome_id has a value which is a genome_transform.object_id
 	expMaxId has a value which is a genome_transform.object_id
 shock_ref is a string
 file_path is a string
@@ -778,6 +780,7 @@ a reference to a hash where the following keys are defined:
 tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 tsvexp_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
 expMaxId has a value which is a genome_transform.object_id
 
 </pre>
@@ -790,6 +793,7 @@ a reference to a hash where the following keys are defined:
 tsvexp_shock_ref has a value which is a genome_transform.shock_ref
 tsvexp_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
+genome_id has a value which is a genome_transform.object_id
 expMaxId has a value which is a genome_transform.object_id
 
 

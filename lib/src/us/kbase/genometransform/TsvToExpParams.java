@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "tsvexp_shock_ref",
     "tsvexp_file_path",
     "workspace",
+    "genome_id",
     "expMaxId"
 })
 public class TsvToExpParams {
@@ -39,6 +40,8 @@ public class TsvToExpParams {
     private String tsvexpFilePath;
     @JsonProperty("workspace")
     private String workspace;
+    @JsonProperty("genome_id")
+    private String genomeId;
     @JsonProperty("expMaxId")
     private String expMaxId;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -88,6 +91,21 @@ public class TsvToExpParams {
         return this;
     }
 
+    @JsonProperty("genome_id")
+    public String getGenomeId() {
+        return genomeId;
+    }
+
+    @JsonProperty("genome_id")
+    public void setGenomeId(String genomeId) {
+        this.genomeId = genomeId;
+    }
+
+    public TsvToExpParams withGenomeId(String genomeId) {
+        this.genomeId = genomeId;
+        return this;
+    }
+
     @JsonProperty("expMaxId")
     public String getExpMaxId() {
         return expMaxId;
@@ -115,7 +133,7 @@ public class TsvToExpParams {
 
     @Override
     public String toString() {
-        return ((((((((((("TsvToExpParams"+" [tsvexpShockRef=")+ tsvexpShockRef)+", tsvexpFilePath=")+ tsvexpFilePath)+", workspace=")+ workspace)+", expMaxId=")+ expMaxId)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("TsvToExpParams"+" [tsvexpShockRef=")+ tsvexpShockRef)+", tsvexpFilePath=")+ tsvexpFilePath)+", workspace=")+ workspace)+", genomeId=")+ genomeId)+", expMaxId=")+ expMaxId)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
