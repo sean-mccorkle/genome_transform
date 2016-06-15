@@ -22,6 +22,7 @@ use Bio::KBase::workspace::Client;
 use Config::IniFiles;
 use Data::Dumper;
 use JSON;
+use File::Path;
 binmode STDOUT, ":utf8";
 #END_HEADER
 
@@ -139,6 +140,19 @@ sub genbank_to_genome
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
     print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
+    my $tmpDir = "/kb/module/work/tmp";
+    my $expDir = "/kb/module/work/tmp/Genomes";
+
+    if (-d $tmpDir){
+
+        print "temp directory exists, continuing..\n";
+    }
+    else{
+
+        mkpath([$tmpDir], 1);
+        mkpath([$expDir], 1);
+        print "creating a temp direcotory for data processing, continuing..\n";
+}
 
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
@@ -246,6 +260,19 @@ sub fasta_to_contig
     my $genome_id = $fasta_to_contig_params->{genome_id};
     my $contig_id = $fasta_to_contig_params->{contigset_id};
      print &Dumper ($fasta_to_contig_params);
+    my $tmpDir = "/kb/module/work/tmp";
+    my $expDir = "/kb/module/work/tmp/Genomes";
+
+    if (-d $tmpDir){
+
+        print "temp directory exists, continuing..\n";
+    }
+    else{
+
+        mkpath([$tmpDir], 1);
+        mkpath([$expDir], 1);
+        print "creating a temp direcotory for data processing, continuing..\n";
+}
 
     #$contig_id = $contig_id."";
 
@@ -391,6 +418,19 @@ sub tsv_to_exp
     my $genome_id = $tsv_to_exp_params->{genome_id};
     my $exp_id = $tsv_to_exp_params->{expMaxId};
     print &Dumper ($tsv_to_exp_params);
+    my $tmpDir = "/kb/module/work/tmp";
+    my $expDir = "/kb/module/work/tmp/Genomes";
+
+    if (-d $tmpDir){
+
+        print "temp directory exists, continuing..\n";
+    }
+    else{
+
+        mkpath([$tmpDir], 1);
+        mkpath([$expDir], 1);
+        print "creating a temp direcotory for data processing, continuing..\n";
+}
 
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
@@ -399,7 +439,7 @@ sub tsv_to_exp
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://appdev.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/workdir/tmp/Genomes");
+system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://appdev.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
 
 #################################
 
