@@ -143,15 +143,15 @@ sub genbank_to_genome
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
-    if (-d $tmpDir){
+    if (-d $expDir){
 
-        print "temp directory exists, continuing..\n";
+        print "temp/Genome directory exists, continuing..\n";
     }
     else{
 
         mkpath([$tmpDir], 1);
         mkpath([$expDir], 1);
-        print "creating a temp direcotory for data processing, continuing..\n";
+        print "creating a temp/expDir direcotory for data processing, continuing..\n";
 }
 
 ################################
@@ -263,7 +263,7 @@ sub fasta_to_contig
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
-    if (-d $tmpDir){
+    if (-d $expDir){
 
         print "temp directory exists, continuing..\n";
     }
@@ -271,7 +271,7 @@ sub fasta_to_contig
 
         mkpath([$tmpDir], 1);
         mkpath([$expDir], 1);
-        print "creating a temp direcotory for data processing, continuing..\n";
+        print "creating a tmp/Genomes direcotory for data processing, continuing..\n";
 }
 
     #$contig_id = $contig_id."";
