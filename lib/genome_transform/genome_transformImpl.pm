@@ -25,7 +25,7 @@ use JSON;
 use File::Path;
 binmode STDOUT, ":utf8";
 #END_HEADER
-
+   
 sub new
 {
     my($class, @args) = @_;
