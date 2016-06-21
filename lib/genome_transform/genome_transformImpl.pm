@@ -135,8 +135,8 @@ sub genbank_to_genome
     my $genome_id = $genbank_to_genome_params->{genome_id};
     my $contig_id = $genbank_to_genome_params->{contigset_id};
 
-    $genome_id = $genome_id."";
-
+        $genome_id = $genome_id."";
+    print "check";
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
     print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
