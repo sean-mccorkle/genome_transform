@@ -158,6 +158,9 @@ sub genbank_to_genome
 system ("ls /data/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/expmax/");
+system ("ls /data/bulktest/data/bulktest/");
+system ("ls /data/bulktest/data/bulktest/janakakbase/");
+system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
 #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
 system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
@@ -253,7 +256,7 @@ sub fasta_to_contig
     my $ctx = $genome_transform::genome_transformServer::CallContext;
     my($return);
     #BEGIN fasta_to_contig
-     my $token=$ctx->token;
+    my $token=$ctx->token;
     my $provenance=$ctx->provenance;
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
@@ -264,6 +267,10 @@ sub fasta_to_contig
      print &Dumper ($fasta_to_contig_params);
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
+
+    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
+    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
+
 
     if (-d $expDir){
 
@@ -278,14 +285,12 @@ sub fasta_to_contig
 
     #$contig_id = $contig_id."";
 
-    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
-
-    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
 
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 system ("ls /data/");
+system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
@@ -425,6 +430,10 @@ sub tsv_to_exp
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
+    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
+
+    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
+
     if (-d $expDir){
 
         print "temp/Genomes directory exists, continuing..\n";
@@ -436,9 +445,6 @@ sub tsv_to_exp
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
 }
 
-    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
-
-    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
 
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
