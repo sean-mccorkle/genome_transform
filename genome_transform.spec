@@ -149,7 +149,7 @@ module genome_transform {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
-        list <string> file_path_list;
+        string file_path_list;
         workspace_id workspace;
         object_id reads_id;
         float insert_size;

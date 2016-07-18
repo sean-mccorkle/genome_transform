@@ -539,7 +539,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
-	file_path_list has a value which is a reference to a list where each element is a string
+	file_path_list has a value which is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	insert_size has a value which is a float
@@ -561,7 +561,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
-	file_path_list has a value which is a reference to a list where each element is a string
+	file_path_list has a value which is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	insert_size has a value which is a float
@@ -1254,7 +1254,7 @@ a reference to a hash where the following keys are defined:
 reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
+file_path_list has a value which is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
 insert_size has a value which is a float
@@ -1270,7 +1270,7 @@ a reference to a hash where the following keys are defined:
 reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
+file_path_list has a value which is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
 insert_size has a value which is a float
