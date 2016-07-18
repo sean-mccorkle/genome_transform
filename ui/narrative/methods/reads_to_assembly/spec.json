@@ -27,7 +27,7 @@
             "optional" : false,
             "advanced" : false,
             "allow_multiple" : false,
-            "default_values" : [ "reads_object_name" ],
+            "default_values" : [ "" ],
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : ["KBaseAssembly.PairedEndLibrary"],
@@ -40,7 +40,7 @@
             "optional" : true,
             "advanced" : false,
             "allow_multiple" : false,
-            "default_values" : [ 300 ],
+            "default_values" : [ "300" ],
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ]
@@ -51,7 +51,7 @@
             "optional" : true,
             "advanced" : false,
             "allow_multiple" : false,
-            "default_values" : [ 60 ],
+            "default_values" : [ "60" ],
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ]
@@ -106,7 +106,7 @@
                   "target_property": "ws"
                 },
                 {
-                  "narrative_system_variable": "KBaseAssembly.PairedEndLibrary",
+                  "constant_value": "KBaseAssembly.PairedEndLibrary",
                   "target_property": "type"
                 },
                 {
