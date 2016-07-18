@@ -30,8 +30,7 @@
             "default_values" : [ "reads_object_name" ],
             "field_type" : "text",
             "text_options" : {
-                "valid_ws_types" : ["KBaseAssembly.PairedEndLibrary" ],
-                "is_output_name" : true
+                "valid_ws_types" : [ ],
             }
         },
         {
@@ -43,7 +42,6 @@
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ],
-                "is_output_name" : true
             }
         },
         {
@@ -55,7 +53,6 @@
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ],
-                "is_output_name" : true
             }
         },
         {
@@ -67,7 +64,6 @@
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ],
-                "is_output_name" : true
             }
         }
     ],
