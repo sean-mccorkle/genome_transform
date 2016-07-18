@@ -2,7 +2,7 @@ package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
 # Use Semantic Versioning (2.0.0-rc.1)
-# http://semver.org
+# http://semver.org 
 our $VERSION = "0.1.0";
 
 =head1 NAME
@@ -21,11 +21,13 @@ use Bio::KBase::AuthToken;
 use Bio::KBase::workspace::Client;
 use Config::IniFiles;
 use Data::Dumper;
+use Test::More;
+use Config::Simple;
 use JSON;
 use File::Path;
 binmode STDOUT, ":utf8";
 #END_HEADER
-   
+
 sub new
 {
     my($class, @args) = @_;
@@ -163,8 +165,8 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
 #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
-system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
-
+my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+system $cmd;
 #################################
 
     #$return = {'file path input hash' => $genome_id};
@@ -293,8 +295,8 @@ system ("ls /data/");
 system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
-system ("/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
-
+my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+system $cmd;
 #################################
 
 my $json;
@@ -428,7 +430,23 @@ sub tsv_to_exp
     my $exp_id = $tsv_to_exp_params->{expMaxId};
     print &Dumper ($tsv_to_exp_params);
     my $tmpDir = "/kb/module/work/tmp";
-    my $expDir = "/kb/module/work/tmp/Genomes";
+    my $expDir = "/kb/module/work/tmp/GenomesData";
+
+############################### check for shock exe
+
+my $insert_size = 300+0;
+my $std = 60+0;
+#system ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type -t PairedEndLibrary  -f /kb/module/data/frag_1.fastq -f /kb/module/data/frag_2.fastq  -o /kb/module/work/tmp/GenomesData/pereads.json --shock_service_url http://ci.kbase.us/services/shock-api --handle_service_url https://ci.kbase.us/services/handle_service");
+#system ("cat /kb/module/work/tmp/GenomesData/pe.reads.json");
+
+
+#########################################################
+
+    if($expDir =~ m/\s+/g)#check for space
+         {
+          $expDir =~ s/\s+/\\ /g;#replace space by slash
+         }
+
 
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
@@ -445,7 +463,7 @@ sub tsv_to_exp
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
 }
 
-
+#my $expDirTest = "$expDir";
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
@@ -454,11 +472,13 @@ system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
-system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
+#my $cmd = q{/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory $expDirTest};
+system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory  $expDir ");
 
+#system $cmd;
 #################################
 
-
+die;
 my $json;
 
 {
@@ -502,7 +522,156 @@ my $exp_ob = decode_json($json);
 
 
 
-=head2 version
+=head2 reads_to_assembly
+
+  $return = $obj->reads_to_assembly($reads_to_assembly_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$return is a genome_transform.object_id
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
+	reads_shock_ref has a value which is a genome_transform.shock_ref
+	reads_handle_ref has a value which is a genome_transform.handle_ref
+	reads_type has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace has a value which is a genome_transform.workspace_id
+	reads_id has a value which is a genome_transform.object_id
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+shock_ref is a string
+handle_ref is a string
+workspace_id is a string
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$return is a genome_transform.object_id
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
+	reads_shock_ref has a value which is a genome_transform.shock_ref
+	reads_handle_ref has a value which is a genome_transform.handle_ref
+	reads_type has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace has a value which is a genome_transform.workspace_id
+	reads_id has a value which is a genome_transform.object_id
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+shock_ref is a string
+handle_ref is a string
+workspace_id is a string
+object_id is a string
+
+
+=end text
+
+
+
+=item Description
+
+
+
+=back
+
+=cut
+
+sub reads_to_assembly
+{
+    my $self = shift;
+    my($reads_to_assembly_params) = @_;
+
+    my @_bad_arguments;
+    (ref($reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"reads_to_assembly_params\" (value was \"$reads_to_assembly_params\")");
+    if (@_bad_arguments) {
+	my $msg = "Invalid arguments passed to reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'reads_to_assembly');
+    }
+
+    my $ctx = $genome_transform::genome_transformServer::CallContext;
+    my($return);
+    #BEGIN reads_to_assembly
+
+    my $token=$ctx->token;
+    my $provenance=$ctx->provenance;
+    my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
+
+    my $file_path = $reads_to_assembly_params->{file_path_list};
+    my $workspace = $reads_to_assembly_params->{workspace};
+    my $reads_id = $reads_to_assembly_params->{reads_id};
+    my $reads_type = $reads_to_assembly_params->{reads_type};
+    my $std = $reads_to_assembly_params->{std_dev};
+    my $is = $reads_to_assembly_params->{insert_size};
+    print &Dumper ($reads_to_assembly_params);
+
+
+    my $tmpDir = "/kb/module/work/tmp";
+    my $expDir = "/kb/module/work/tmp/GenomesData";
+
+
+    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/kb/module/data/frag_1.fastq", "-f", "/kb/module/data/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f",$file_path->[0], "-f", $file_path->[1], "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my $rc = system(@cmd);
+    
+    my $json;
+    {
+        local $/; #Enable 'slurp' mode
+        open my $fh, "<", "/kb/module/work/tmp/GenomesData/pereads.json";
+        #open my $fh, "<", "/kb/module/data/pereads.json";
+        $json = <$fh>;
+        close $fh;
+    }
+
+    my $ro = decode_json($json);
+    #print &Dumper ($ro);
+    #print &Dumper ($json);
+    #print "\n\nreached here before saving\n";
+
+    my $obj_info_list = undef;
+        #eval {
+            $obj_info_list = $wsClient->save_objects({
+                'id'=>7995,
+                'objects'=>[{
+                'type'=>'KBaseAssembly.PairedEndLibrary',
+                'data'=>$ro,
+                'name'=>$reads_id,
+                'provenance'=>$provenance
+                }]
+            });
+        #};
+    #if ($@) {
+     #   die "Error saving modified genome object to workspace:\n".$@;
+    #}
+
+    $return = $reads_id;
+    print &Dumper ($obj_info_list);
+    #print "\nreached here\n";
+
+
+    #END reads_to_assembly
+    my @_bad_returns;
+    (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
+    if (@_bad_returns) {
+	my $msg = "Invalid returns passed to reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_returns);
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+							       method_name => 'reads_to_assembly');
+    }
+    return($return);
+}
+
+
+
+
+=head2 version 
 
   $return = $obj->version()
 
@@ -726,6 +895,192 @@ a string
 
 
 
+=head2 reads_type
+
+=over 4
+
+
+
+=item Description
+
+Name of a KBase reads type
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 reads_type
+
+=over 4
+
+
+
+=item Description
+
+Name of a KBase reads_id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 file_path_list
+
+=over 4
+
+
+
+=item Description
+
+Name of a KBase file_path_list
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 handle_ref
+
+=over 4
+
+
+
+=item Description
+
+Name of a KBase handle ref
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 std_dev
+
+=over 4
+
+
+
+=item Description
+
+Name of a standard deviation
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a float
+</pre>
+
+=end html
+
+=begin text
+
+a float
+
+=end text
+
+=back
+
+
+
+=head2 insert_size
+
+=over 4
+
+
+
+=item Description
+
+Name of a insert size
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a float
+</pre>
+
+=end html
+
+=begin text
+
+a float
+
+=end text
+
+=back
+
+
+
 =head2 genbank_to_genome_params
 
 =over 4
@@ -865,6 +1220,61 @@ tsvexp_file_path has a value which is a genome_transform.file_path
 workspace has a value which is a genome_transform.workspace_id
 genome_id has a value which is a genome_transform.object_id
 expMaxId has a value which is a genome_transform.object_id
+
+
+=end text
+
+=back
+
+
+
+=head2 reads_to_assembly_params
+
+=over 4
+
+
+
+=item Description
+
+Input parameters for the "reads to assembly" function.
+
+shock_ref shock_ref - optional URL to genbank file stored in Shock
+file_path file_path - optional path to genbank file on local file system
+workspace_id workspace - workspace where object will be saved
+object_id reads_id - workspace ID to which the genome object should be saved
+object_id contigset_id - workspace ID to which the contigs should be saved
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+insert_size has a value which is a float
+std_dev has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+insert_size has a value which is a float
+std_dev has a value which is a float
 
 
 =end text
