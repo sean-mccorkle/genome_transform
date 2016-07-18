@@ -19,7 +19,8 @@
             "default_values" : [ "/data/bulktest/data/bulktest/janakakbase/reads/" ],
             "field_type" : "text",
             "text_options" : {
-                "valid_ws_types" : [ ]
+                "valid_ws_types" : [ ],
+                "is_output_name":true
             }
         },
         {
@@ -30,7 +31,7 @@
             "default_values" : [ "reads_object_name" ],
             "field_type" : "text",
             "text_options" : {
-                "valid_ws_types" : [ ]
+                "valid_ws_types" : ["KBaseAssembly.PairedEndLibrary"]
             }
         },
         {
