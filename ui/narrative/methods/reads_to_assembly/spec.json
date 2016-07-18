@@ -106,6 +106,10 @@
                   "target_property": "ws"
                 },
                 {
+                  "narrative_system_variable": "KBaseAssembly.PairedEndLibrary",
+                  "target_property": "type"
+                },
+                {
                     "input_parameter": "file_path_list",
                     "target_property": "id"
                 },
