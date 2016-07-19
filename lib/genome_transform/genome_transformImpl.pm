@@ -623,8 +623,8 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/reads/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
-    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/kb/module/data/frag_1.fastq", "-f", "/kb/module/data/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", "$reads_type", "-f","/data/bulktest/data/bulktest/janakakbase/fasta/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/fasta/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", "$reads_type", "-f","/kb/module/data/frag_1.fastq", "-f", "/kb/module/data/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", "$reads_type", "-f","/data/bulktest/data/bulktest/janakakbase/fasta/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/fasta/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
     
     my $json;
