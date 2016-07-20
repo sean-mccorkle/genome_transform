@@ -43,7 +43,7 @@ module genome_transform {
 	/*
 		Name of a KBase reads_id
 	*/
-	typedef string reads_type;
+	typedef string reads_id;
 
 	/*
 		Name of a KBase file_path_list
