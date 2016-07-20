@@ -33,6 +33,9 @@ parameters :
     reads_id:
         ui-name : Name of the reads object
         short-hint : Name of the reads object
+    outward:
+        ui-name : flag is set to 1 if reads in the pair point outward
+        short-hint : flag is set to 1 if reads in the pair point outward
     insert_size:
         ui-name : Insert size
         short-hint : Insert size

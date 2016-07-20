@@ -28,6 +28,11 @@ module genome_transform {
 	*/
 	typedef string report_id;
 
+	/*
+	    status of the reads pair point outward or not
+	*/
+	typedef string outward;
+
 
 	/*
 		Name of a KBase workspace
@@ -149,9 +154,10 @@ module genome_transform {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
-        string file_path_list;
+        list <string> file_path_list;
         workspace_id workspace;
         object_id reads_id;
+        string outward;
         float insert_size;
         float std_dev;
 

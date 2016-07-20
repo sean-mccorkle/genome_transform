@@ -15,12 +15,27 @@
             "id" : "file_path_list",
             "optional" : false,
             "advanced" : false,
-            "allow_multiple" : false,
-            "default_values" : [ "/data/bulktest/data/bulktest/janakakbase/fasta/" ],
+            "allow_multiple" : true,
+            "default_values" : [ "" ],
             "field_type" : "text",
             "text_options" : {
                 "valid_ws_types" : [ ]
             }
+        },
+        {
+         "field_type" : "checkbox",
+         "allow_multiple" : false,
+         "optional" : false,
+         "id" : "outward",
+         "advanced" : false,
+         "default_values" : [0],
+          "checkbox_options" : {
+            "unchecked_value" : 0,
+            "checked_value" : 1
+          },
+          "text_options" : {
+            "valid_ws_types" : []
+          }
         },
         {
             "id" : "reads_id",
@@ -90,6 +105,10 @@
                 {
                     "input_parameter": "reads_id",
                     "target_property": "reads_id"
+                },
+                {
+                    "input_parameter": "outward",
+                    "target_property": "outward"
                 },
                 {
                     "input_parameter": "insert_size",

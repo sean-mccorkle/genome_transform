@@ -613,7 +613,7 @@ sub reads_to_assembly
     my $is = $reads_to_assembly_params->{insert_size};
     print &Dumper ($reads_to_assembly_params);
 
-
+    print "\n\nstarting reads to assembly method.....\n\n\n";
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
@@ -628,7 +628,8 @@ sub reads_to_assembly
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
 }
 
-
+    my $filep1 = "/kb/module/data/frag_1.fastq";
+    my $filep2 = "/kb/module/data/frag_2.fastq";
 
 system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
@@ -636,8 +637,8 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/reads/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 system ("ls /kb/module/data/");
 
-    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", "$reads_type", "-f","/kb/module/data/frag_1.fastq", "-f", "/kb/module/data/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f",$file_path->[0], "-f", $file_path->[1], "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
     
     my $json;
@@ -651,8 +652,8 @@ system ("ls /kb/module/data/");
 
     my $ro = decode_json($json); 
     print &Dumper ($ro);
-    print &Dumper ($json);
-    print "\n\nreached here before saving\n";
+
+    print "\n\n saving the object into the workspace\n";
 
     my $obj_info_list = undef;
         eval {
@@ -672,8 +673,6 @@ system ("ls /kb/module/data/");
 
     $return = $reads_id;
     print &Dumper ($obj_info_list);
-    #print "\nreached here\n";
-
 
     #END reads_to_assembly
     my @_bad_returns;
