@@ -615,7 +615,19 @@ sub reads_to_assembly
 
 
     my $tmpDir = "/kb/module/work/tmp";
-    my $expDir = "/kb/module/work/tmp/GenomesData";
+    my $expDir = "/kb/module/work/tmp/Genomes";
+
+    if (-d $expDir){
+
+        print "temp/Genomes directory exists, continuing..\n";
+    }
+    else{
+
+        mkpath([$tmpDir], 1);
+        mkpath([$expDir], 1);
+        print "creating a temp/Genomes direcotory for data processing, continuing..\n";
+}
+
 
 
 system ("ls /data/bulktest/data/bulktest/");
@@ -625,7 +637,7 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 system ("ls /kb/module/data/");
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", "$reads_type", "-f","/kb/module/data/frag_1.fastq", "-f", "/kb/module/data/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/GenomesData/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
     
     my $json;
@@ -643,7 +655,7 @@ system ("ls /kb/module/data/");
     print "\n\nreached here before saving\n";
 
     my $obj_info_list = undef;
-        #eval {
+        eval {
             $obj_info_list = $wsClient->save_objects({
                 'id'=>7995,
                 'objects'=>[{
@@ -653,10 +665,10 @@ system ("ls /kb/module/data/");
                 'provenance'=>$provenance
                 }]
             });
-        #};
-    #if ($@) {
-     #   die "Error saving modified genome object to workspace:\n".$@;
-    #}
+        };
+    if ($@) {
+        die "Error saving modified genome object to workspace:\n".$@;
+    }
 
     $return = $reads_id;
     print &Dumper ($obj_info_list);
