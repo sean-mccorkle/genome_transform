@@ -643,7 +643,7 @@ system ("ls /kb/module/data/");
     my $json;
     {
         local $/; #Enable 'slurp' mode
-        open my $fh, "<", "/kb/module/work/tmp/GenomesData/pereads.json";
+        open my $fh, "<", "/kb/module/work/tmp/Genomes/pereads.json";
         #open my $fh, "<", "/kb/module/data/pereads.json";
         $json = <$fh>;
         close $fh;
