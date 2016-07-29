@@ -38,7 +38,7 @@ binmode STDOUT, ":utf8";
 sub  system_and_check
    {
     my $cmd = shift;
-    print "### convert sra command is [$cmd]\n";
+    #print "### convert sra command is [$cmd]\n";
     system( $cmd );
     if ( $? == -1 )
        {  die "$cmd failed to execute: $!\n";  }
@@ -47,7 +47,7 @@ sub  system_and_check
                ($? & 127), ($? & 128 ) ? "with" : "without";
           die "$0 terminating\n";
        }
-    print "### looks like successful return\n";
+    #print "### looks like successful return\n";
    }
 
 # convert_sra( $filename, $type) 
@@ -840,8 +840,8 @@ sub sra_reads_to_assembly
 
     my $token=$ctx->token;
     my $provenance=$ctx->provenance;
-    print "in sra_reads_to_assembly()\n";
-    print "workspace is ", $self->{'workspace-url'}, "\ntoken is ", $token, "\n";
+    #print "in sra_reads_to_assembly()\n";
+    #print "workspace is ", $self->{'workspace-url'}, "\ntoken is ", $token, "\n";
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
     my $file_path = $reads_to_assembly_params->{file_path_list};
@@ -850,7 +850,7 @@ sub sra_reads_to_assembly
     my $reads_type = $reads_to_assembly_params->{reads_type};
     my $std = $reads_to_assembly_params->{std_dev};
     my $is = $reads_to_assembly_params->{insert_size};
-    print &Dumper ($reads_to_assembly_params);
+    #print &Dumper ($reads_to_assembly_params);
 
     print "\n\nstarting reads to assembly method.....\n\n\n";
     my $tmpDir = "/kb/module/work/tmp";
@@ -865,9 +865,9 @@ sub sra_reads_to_assembly
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
        }
 
-
+    chdir( $tmpDir ) || die "Can't chdir to $tmpDir: $!\n";
     system ("ls /kb/module/data/");
-    print "before convert_sra( ", $file_path->[0], ", ", $reads_type, ") current directory contents are\n";
+    #print "before convert_sra( ", $file_path->[0], ", ", $reads_type, ") current directory contents are\n";
     system( "ls");
 
     my @fq_files = convert_sra( $file_path->[0], $reads_type );   # convert
@@ -886,7 +886,7 @@ sub sra_reads_to_assembly
                 "-f", $fq_files[0]
                 );
     push( @cmd, "-f", $fq_files[1], ) if ( @fq_files == 2 );
-    print "transform command is ", join( " ", @cmd ), "\n";
+    #print "transform command is ", join( " ", @cmd ), "\n";
 
     # run the transform script (same as with reads_to_assembly() )
     my $rc = system(@cmd);
@@ -898,19 +898,24 @@ sub sra_reads_to_assembly
         #open my $fh, "<", "/kb/module/data/pereads.json";
         $json = <$fh>;
         close $fh;
+        #print "json is\n$json\n";
     }
 
     my $ro = decode_json($json); 
-    print &Dumper ($ro);
+    #print &Dumper ($ro);
 
-    print "\n\n saving the object into the workspace\n";
+    my $handle_type = 'KBaseAssembly.PairedEndLibrary';
+    if ( $reads_type eq 'SingleEndLibrary' )
+       {  $handle_type = 'KBaseAssembly.SingleEndLibrary'; }
+
+    #print "\n\n saving the object, handle type [$handle_type], into the workspace\n";
 
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'id'=>7995,
+                'id'=>$workspace,
                 'objects'=>[{
-                'type'=>'KBaseAssembly.PairedEndLibrary',
+                'type'=>$handle_type,
                 'data'=>$ro,
                 'name'=>$reads_id,
                 'provenance'=>$provenance
@@ -918,11 +923,12 @@ sub sra_reads_to_assembly
             });
         };
     if ($@) {
+        #print "Error saving modified genome object to workspace:\n", $@;
         die "Error saving modified genome object to workspace:\n".$@;
     }
 
     $return = $reads_id;
-    print &Dumper ($obj_info_list);
+    #print &Dumper ($obj_info_list);
 
 
     #END sra_reads_to_assembly

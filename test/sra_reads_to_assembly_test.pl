@@ -28,15 +28,15 @@ $input_sra = {
     #reads_type => 'PairedEndLibrary',
     reads_type => 'SingleEndLibrary',
     file_path_list => [ '/kb/module/data/SRR3944606.sra' ],
-    workspace => 'sean_mccorkle_test_area1',
-    reads_id => 'FirstSRAreads',
+    workspace => '9196',
+    reads_id => 'ThridSRAreads',
     # string outward;
     # float insert_size;
     # float std_dev;
 
 };
 
-print "OH HAI\n"; 
+print "begin sra_reads_to_assembly_test.pl\n"; 
 
 eval {
     { my $ret = $impl->sra_reads_to_assembly( $input_sra );
@@ -44,7 +44,7 @@ eval {
     print Dumper( $ret ); }
 };
 
-print "KTHXBYE\n"; exit;
+print "begin sra_reads_to_assembly_test.pl\n"; 
 
 my $err = undef;
 if ($@) {
