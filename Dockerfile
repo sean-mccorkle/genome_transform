@@ -15,7 +15,9 @@ RUN cd /kb/dev_container/modules && \
     rm -rf communities_api && \
     rm -rf KBaseFBAModeling && \
     rm -rf ModelSEED && \
-    git clone https://github.com/kbase/transform && \
+    git clone https://github.com/danielolson5/transform && \
+    cd transform && \
+    git checkout develop && \
     . /kb/dev_container/user-env.sh && \
     cd /kb/dev_container/modules/transform && make && make TARGET=/kb/deployment deploy && cd ../../..
 

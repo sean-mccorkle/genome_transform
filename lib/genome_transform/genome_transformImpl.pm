@@ -2,7 +2,7 @@ package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
 # Use Semantic Versioning (2.0.0-rc.1)
-# http://semver.org 
+# http://semver.org
 our $VERSION = "0.1.0";
 
 =head1 NAME
@@ -164,9 +164,18 @@ system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
+
+
+    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
+    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name",$workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
+    my $rc = system(@cmd);
+
+
+
+
 #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
-my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
-system $cmd;
+#my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+#system $cmd;
 #################################
 
     #$return = {'file path input hash' => $genome_id};
@@ -539,9 +548,10 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
-	file_path_list has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
 shock_ref is a string
@@ -561,9 +571,10 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
-	file_path_list has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
 shock_ref is a string
@@ -640,7 +651,8 @@ system ("ls /kb/module/data/");
     my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f",$file_path->[0], "-f", $file_path->[1], "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
-    
+
+    print "finished the assembly scripts, now writing to output file\n";
     my $json;
     {
         local $/; #Enable 'slurp' mode
@@ -650,7 +662,7 @@ system ("ls /kb/module/data/");
         close $fh;
     }
 
-    my $ro = decode_json($json); 
+    my $ro = decode_json($json);
     print &Dumper ($ro);
 
     print "\n\n saving the object into the workspace\n";
@@ -688,7 +700,7 @@ system ("ls /kb/module/data/");
 
 
 
-=head2 version 
+=head2 version
 
   $return = $obj->version()
 
@@ -859,6 +871,37 @@ a string
 =item Description
 
 Name of an report id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 outward
+
+=over 4
+
+
+
+=item Description
+
+status of the reads pair point outward or not
 
 
 =item Definition
@@ -1271,9 +1314,10 @@ a reference to a hash where the following keys are defined:
 reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
-file_path_list has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
 
@@ -1287,9 +1331,10 @@ a reference to a hash where the following keys are defined:
 reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
-file_path_list has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
 
