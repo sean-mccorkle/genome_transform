@@ -717,10 +717,28 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/reads/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 system ("ls /kb/module/data/");
 
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f",$file_path->[0], "-f", $file_path->[1], "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type",
+    "-t", $reads_type, "-f",$file_path->[0],
+    "-o","/kb/module/work/tmp/Genomes/pereads.json",
+    "--shock_service_url","http://ci.kbase.us/services/shock-api",
+    "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+
+    push( @cmd, "-f", $file_path->[1], ) if ( @$file_path == 2 );
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
 
+    my $handle_type;
+    if ( $reads_type eq 'SingleEndLibrary' ){
+       $handle_type = 'KBaseAssembly.SingleEndLibrary';
+    }
+    elsif ( $reads_type eq 'PairedEndLibrary' ){
+       $handle_type = 'KBaseAssembly.PairedEndLibrary';
+    }
+    else{
+
+        print "KBase reads type is missing, resubmit with the correct type";
+        die;
+    }
     print "finished the assembly scripts, now writing to output file\n";
     my $json;
     {
@@ -739,9 +757,9 @@ system ("ls /kb/module/data/");
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'id'=>7995,
+                'workspace'=>$workspace,
                 'objects'=>[{
-                'type'=>'KBaseAssembly.PairedEndLibrary',
+                'type'=> $handle_type,
                 'data'=>$ro,
                 'name'=>$reads_id,
                 'provenance'=>$provenance
