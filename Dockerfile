@@ -37,7 +37,7 @@ RUN chmod 777 /kb/module
 
 WORKDIR /kb/module
 
-RUN make all
+RUN make
 
 ENTRYPOINT [ "./scripts/entrypoint.sh" ]
 
