@@ -70,7 +70,10 @@ module genome_transform {
 	*/
 	typedef float insert_size;
 
-
+	/*
+		sequence type
+	*/
+	typedef string sra;
 
 
 	/*
@@ -157,14 +160,29 @@ module genome_transform {
         list <string> file_path_list;
         workspace_id workspace;
         object_id reads_id;
+        string sra;
         string outward;
         float insert_size;
         float std_dev;
 
    }reads_to_assembly_params;
 
+    typedef structure {
+		shock_ref reads_shock_ref;
+        handle_ref reads_handle_ref;
+        string reads_type;
+        list <string> file_path_list;
+        workspace_id workspace;
+        object_id reads_id;
+        string sra;
+        string outward;
+        float insert_size;
+        float std_dev;
+
+   }sra_reads_to_assembly_params;
+
    funcdef reads_to_assembly(reads_to_assembly_params) returns (object_id) authentication required;
 
-   funcdef sra_reads_to_assembly(reads_to_assembly_params) returns (object_id) authentication required;
+   funcdef sra_reads_to_assembly(sra_reads_to_assembly_params) returns (object_id) authentication required;
 
 };

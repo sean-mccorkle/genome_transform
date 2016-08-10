@@ -28,7 +28,7 @@ use File::Path;
 use File::Basename;
 binmode STDOUT, ":utf8";
 
-# 
+#
 # These are two routines used by sra_reads_to_assembly()
 #
 
@@ -43,19 +43,19 @@ sub  system_and_check
     if ( $? == -1 )
        {  die "$cmd failed to execute: $!\n";  }
     elsif ( $? & 127 )
-       {  printf STDERR "$cmd died with signal %d, %s coredump\n", 
+       {  printf STDERR "$cmd died with signal %d, %s coredump\n",
                ($? & 127), ($? & 128 ) ? "with" : "without";
           die "$0 terminating\n";
        }
     #print "### looks like successful return\n";
    }
 
-# convert_sra( $filename, $type) 
+# convert_sra( $filename, $type)
 #    $filename is SRA filename (string)
 #    (may have different path, but output will be in current working directory)
 #    $type is 'SingleEndLibrary' or 'PairedEndLibrary'
 # runs SRA conversion, converted files (fastq) will be left
-# in working directory, returns converted file name(s) 
+# in working directory, returns converted file name(s)
 #  - with .fastq extention, in a list
 
 my $sra_convert_program = "/kb/deployment/bin/fastq-dump";
@@ -618,6 +618,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -641,6 +642,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -715,10 +717,28 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/reads/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 system ("ls /kb/module/data/");
 
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f",$file_path->[0], "-f", $file_path->[1], "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type",
+    "-t", $reads_type, "-f",$file_path->[0],
+    "-o","/kb/module/work/tmp/Genomes/pereads.json",
+    "--shock_service_url","http://ci.kbase.us/services/shock-api",
+    "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+
+    push( @cmd, "-f", $file_path->[1], ) if ( @$file_path == 2 );
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my $rc = system(@cmd);
 
+    my $handle_type;
+    if ( $reads_type eq 'SingleEndLibrary' ){
+       $handle_type = 'KBaseAssembly.SingleEndLibrary';
+    }
+    elsif ( $reads_type eq 'PairedEndLibrary' ){
+       $handle_type = 'KBaseAssembly.PairedEndLibrary';
+    }
+    else{
+
+        print "KBase reads type is missing, resubmit with the correct type";
+        die;
+    }
     print "finished the assembly scripts, now writing to output file\n";
     my $json;
     {
@@ -737,9 +757,9 @@ system ("ls /kb/module/data/");
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'id'=>7995,
+                'workspace'=>$workspace,
                 'objects'=>[{
-                'type'=>'KBaseAssembly.PairedEndLibrary',
+                'type'=> $handle_type,
                 'data'=>$ro,
                 'name'=>$reads_id,
                 'provenance'=>$provenance
@@ -769,7 +789,7 @@ system ("ls /kb/module/data/");
 
 =head2 sra_reads_to_assembly
 
-  $return = $obj->sra_reads_to_assembly($reads_to_assembly_params)
+  $return = $obj->sra_reads_to_assembly($sra_reads_to_assembly_params)
 
 =over 4
 
@@ -778,15 +798,16 @@ system ("ls /kb/module/data/");
 =begin html
 
 <pre>
-$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
 $return is a genome_transform.object_id
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -801,15 +822,16 @@ object_id is a string
 
 =begin text
 
-$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
 $return is a genome_transform.object_id
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
+	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -834,10 +856,10 @@ object_id is a string
 sub sra_reads_to_assembly
 {
     my $self = shift;
-    my($reads_to_assembly_params) = @_;
+    my($sra_reads_to_assembly_params) = @_;
 
     my @_bad_arguments;
-    (ref($reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"reads_to_assembly_params\" (value was \"$reads_to_assembly_params\")");
+    (ref($sra_reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"sra_reads_to_assembly_params\" (value was \"$sra_reads_to_assembly_params\")");
     if (@_bad_arguments) {
 	my $msg = "Invalid arguments passed to sra_reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -854,15 +876,15 @@ sub sra_reads_to_assembly
     #print "workspace is ", $self->{'workspace-url'}, "\ntoken is ", $token, "\n";
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
-    my $file_path = $reads_to_assembly_params->{file_path_list};
-    my $workspace = $reads_to_assembly_params->{workspace};
-    my $reads_id = $reads_to_assembly_params->{reads_id};
-    my $reads_type = $reads_to_assembly_params->{reads_type};
-    my $std = $reads_to_assembly_params->{std_dev};
-    my $is = $reads_to_assembly_params->{insert_size};
-    #print &Dumper ($reads_to_assembly_params);
+    my $file_path = $sra_reads_to_assembly_params->{file_path_list};
+    my $workspace = $sra_reads_to_assembly_params->{workspace};
+    my $reads_id = $sra_reads_to_assembly_params->{reads_id};
+    my $reads_type = $sra_reads_to_assembly_params->{reads_type};
+    my $std = $sra_reads_to_assembly_params->{std_dev};
+    my $is = $sra_reads_to_assembly_params->{insert_size};
+    print &Dumper ($sra_reads_to_assembly_params);
 
-    print "\n\nstarting reads to assembly method.....\n\n\n";
+    print "\n\nstarting SRA reads to assembly method.....\n\n\n";
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
@@ -888,10 +910,10 @@ sub sra_reads_to_assembly
     # whether or not this is a single or paired end library.  Construct the transform script
     # command line with one file, and append 2nd file argument if it exists
 
-    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, 
-                "-o","/kb/module/work/tmp/Genomes/pereads.json", 
-                "--shock_service_url","http://ci.kbase.us/services/shock-api", 
-                "--handle_service_url","https://ci.kbase.us/services/handle_service", 
+    my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type,
+                "-o","/kb/module/work/tmp/Genomes/pereads.json",
+                "--shock_service_url","http://ci.kbase.us/services/shock-api",
+                "--handle_service_url","https://ci.kbase.us/services/handle_service",
                 "--outward", 0,
                 "-f", $fq_files[0]
                 );
@@ -900,7 +922,7 @@ sub sra_reads_to_assembly
 
     # run the transform script (same as with reads_to_assembly() )
     my $rc = system(@cmd);
-    
+
     my $json;
     {
         local $/; #Enable 'slurp' mode
@@ -911,19 +933,19 @@ sub sra_reads_to_assembly
         #print "json is\n$json\n";
     }
 
-    my $ro = decode_json($json); 
-    #print &Dumper ($ro);
+    my $ro = decode_json($json);
+    print &Dumper ($ro);
 
     my $handle_type = 'KBaseAssembly.PairedEndLibrary';
     if ( $reads_type eq 'SingleEndLibrary' )
        {  $handle_type = 'KBaseAssembly.SingleEndLibrary'; }
 
-    #print "\n\n saving the object, handle type [$handle_type], into the workspace\n";
+    print "\n\n saving the object, handle type [$handle_type], into the workspace\n";
 
     my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
-                'id'=>$workspace,
+                'workspace'=>$workspace,
                 'objects'=>[{
                 'type'=>$handle_type,
                 'data'=>$ro,
@@ -951,6 +973,7 @@ sub sra_reads_to_assembly
     }
     return($return);
 }
+
 
 
 
@@ -1395,6 +1418,37 @@ a float
 
 
 
+=head2 sra
+
+=over 4
+
+
+
+=item Description
+
+sequence type
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 genbank_to_genome_params
 
 =over 4
@@ -1571,6 +1625,7 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
+sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
@@ -1588,6 +1643,55 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
+sra has a value which is a string
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 sra_reads_to_assembly_params
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+sra has a value which is a string
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
