@@ -21,6 +21,9 @@ RUN cd /kb/dev_container/modules && \
     . /kb/dev_container/user-env.sh && \
     cd /kb/dev_container/modules/transform && make && make TARGET=/kb/deployment deploy && cd ../../..
 
+# Get perl MMagic library for identifying compressed types
+RUN cpanm File::MMagic
+
 # Get NCBI SRATools (for fastq-dump)
 RUN cd /kb/dev_container/modules && \
     mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
