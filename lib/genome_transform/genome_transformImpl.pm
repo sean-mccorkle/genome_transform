@@ -1,6 +1,7 @@
 package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
+
 # Use Semantic Versioning (2.0.0-rc.1)
 # http://semver.org
 our $VERSION = "0.1.0";
@@ -26,10 +27,117 @@ use Config::Simple;
 use JSON;
 use File::Path;
 use File::Basename;
+use File::MMagic;      # needs to be added to container via Dockerfile
+                       # required by decompress_if_needed()
 binmode STDOUT, ":utf8";
 
 #
-# These are two routines used by sra_reads_to_assembly()
+# $uncompressed_filename = decompress_if_needed( $input_filename )
+#
+# this determines if the input file is a gzip or bzip2 compressed file,
+# and if so, invokes the appropriate decompress program (gunzip or bunzip2)
+# and returns the decompressed filename (minus the suffix)
+#
+# If the file is not identified as a compressed file, no action is taken
+# and the original filename is returned
+#
+sub  decompress_if_needed
+   {
+    my $infilename = shift;
+
+    # make the decision based on the mime magic type
+    my $mm = new File::MMagic;
+    my $mimetype = $mm->checktype_filename( $infilename );
+    print "mimetype is [$mimetype]\n";
+
+    if ( $mimetype eq 'application/x-gzip' || $mimetype eq 'application/gzip' )
+       {
+        print "using gunzip\n";
+        my ($new_filepath,$new_suff) = force_extention( $infilename, '.gz', '.gzip' );
+        system_and_check( "gunzip $new_filepath" . $new_suff );  # construct forced filename
+        die_if_unsupported( $new_filepath );
+        return( $new_filepath );                                 # because gunzip strips suffix
+       }
+    elsif ( $mimetype eq 'application/x-bzip2' )
+       {
+        print "using bunzip2\n";
+        my ($new_filepath,$new_suff) = force_extention( $infilename, '.bz2', '.bzip2', '.bz', '.bzip' );
+        system_and_check( "bunzip2 $new_filepath" . $new_suff );
+        die_if_unsupported( $new_filepath );
+        return( $new_filepath );
+       }
+    else
+       {
+        die_if_unsupported( $infilename );
+        print "no action - return original filename\n";
+        # possible further checks here?  ie what if file has .gz extension but
+        # was not identified as such with MMagic?
+        return( $infilename );
+       }
+   }
+
+# this ensures the $infilename has the favored extention (first in the 
+# list in @exts), renaming if necessary.   Return the pathname (without suffix) and
+# the suffix seperately (the new filename will be the concatentation of the two)
+
+sub force_extention
+   {
+    my ($infilename, @exts) = @_;
+    my ($filepathname, $suffix) = pathname_and_suffix( $infilename, @exts );
+
+    print "force extension $infilename -> $filepathname  [$suffix]\n";
+    if ( $suffix ne $exts[0] )
+        {
+         print "not correct suffix, adding ", $exts[0], "...";
+         my $newinfilename = $filepathname . $exts[0];
+         print "   to $newinfilename\n";
+         rename( $infilename, $newinfilename );
+        }
+     return( ($filepathname, $exts[0]) );
+   }
+
+# fileparse() and basename() both strip off any preceeding directory path and we want
+# to keep that - we're really only interested in the suffix and the rest
+sub  pathname_and_suffix
+   {
+    my ( $infilename, @exts ) = @_;
+    my ( $basename, $dirs, $suffix ) = fileparse( $infilename, @exts );
+    return( ( "$dirs". "$basename", $suffix ) );
+   }
+
+# this examines the mimetype of the input file and dies with an error
+# message if its our our list of aggregated file types (tar, zip etc)
+sub  die_if_unsupported
+   {
+    my $filename = shift;
+    my @unsp_list = ( 'application/gtar',
+                      'application/x-gtar',
+                      'application/stuffit',
+                      'application/x-stuffit',
+                      'application/stuffitx',
+                      'application/x-stuffitx',
+                      'application/tar',
+                      'application/x-tar',
+                      'application/zip',
+                      'application/x-zip'
+                   );
+    my $mm = new File::MMagic;
+
+    my $type = $mm->checktype_filename( $filename );
+    print "die if unsupported [$filename] [$type]\n";
+    #print "spec [", join( ",", grep( $type eq $_, @unsp_list ) ), "]\n";
+    my @spec = grep( $type eq $_, @unsp_list );
+    print "spec [", join( ",", @spec ), "]\n";
+    if ( @spec  )
+       {
+        $spec[0] =~ s=^application/(x-)?==;
+        print STDERR "Error: $filename is of type $spec[0] which is not supported by KBase bulk upload.\n" ;
+        die "We're sorry, but $filename is of type $spec[0] which is not supported by KBase bulk upload.\n" ;
+       }
+
+   }
+#
+# These are two routines used by sra_reads_to_assembly() and decompress_if_needed()
 #
 
 # system_and_check( $cmd)
@@ -223,6 +331,16 @@ sub genbank_to_genome
         print "creating a temp/expDir direcotory for data processing, continuing..\n";
 }
 
+    # my understanding is that the upload script trns_transform_Genbank_Genome_to_KBaseGenomes_Genome.py
+    # takes as input either a file or a directory of files, so this code should decompress in either situation
+    if ( -f $file_path )
+       {   $file_path = decompress_if_needed( $file_path );  }
+    elsif ( -d $file_path )
+       {
+        foreach my $dfile ( glob( "$file_path/*" ) )
+           { $dfile = decompress_if_needed( $dfile ); }
+       }
+
 ################################
 system ("ls /data/");
 system ("ls /data/bulktest/data/");
@@ -234,7 +352,7 @@ system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name",$workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
+    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
     my $rc = system(@cmd);
 
 
@@ -363,6 +481,16 @@ sub fasta_to_contig
 
     #$contig_id = $contig_id."";
 
+    # my understanding is that the upload script trns_transform_Genbank_Genome_to_KBaseGenomes_Genome.py
+    # takes as input either a file or a directory of files, so this code should decompress in either situation
+    if ( -f $file_path )
+       {   $file_path = decompress_if_needed( $file_path );  }
+    elsif ( -d $file_path )
+       {
+        foreach my $dfile ( glob( "$file_path/*" ) )
+           { $dfile = decompress_if_needed( $dfile ); }
+        }
+
 
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
@@ -371,7 +499,9 @@ system ("ls /data/");
 system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
-my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+#my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
+print "cmd is ", Dumper( $cmd );
 system $cmd;
 #################################
 
@@ -538,6 +668,16 @@ my $std = 60+0;
         mkpath([$expDir], 1);
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
 }
+
+    # my understanding is that the upload script trns_transform_Genbank_Genome_to_KBaseGenomes_Genome.py
+    # takes as input either a file or a directory of files, so this code should decompress in either situation
+    if ( -f $file_path )
+       {   $file_path = decompress_if_needed( $file_path );  }
+    elsif ( -d $file_path )
+       {
+        foreach my $dfile ( glob( "$file_path/*" ) )
+           { $dfile = decompress_if_needed( $dfile ); }
+        }
 
 #my $expDirTest = "$expDir";
 ################################
@@ -710,6 +850,11 @@ sub reads_to_assembly
 
     my $filep1 = "/kb/module/data/frag_1.fastq";
     my $filep2 = "/kb/module/data/frag_2.fastq";
+
+    # decompress any gz or bzip2 files - capture new names of files in 
+    # the process
+    foreach my $i ( 0..$#{$file_path} )
+        { $file_path->[$i] = decompress_if_needed( $file_path->[$i] ); }
 
 system ("ls /data/bulktest/data/bulktest/");
 system ("ls /data/bulktest/data/bulktest/janakakbase/");
@@ -901,6 +1046,8 @@ sub sra_reads_to_assembly
     system ("ls /kb/module/data/");
     #print "before convert_sra( ", $file_path->[0], ", ", $reads_type, ") current directory contents are\n";
     system( "ls");
+
+    $file_path->[0] = decompress_if_needed( $file_path->[0] );
 
     my @fq_files = convert_sra( $file_path->[0], $reads_type );   # convert
     print "after convert_sra( ", $file_path->[0], ", ", $reads_type, "), result fq_files are ", join( ",", @fq_files), "\n";
