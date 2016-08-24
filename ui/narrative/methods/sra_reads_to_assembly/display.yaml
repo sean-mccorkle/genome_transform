@@ -36,9 +36,6 @@ parameters :
     outward:
         ui-name : flag is set to 1 if reads in the pair point outward
         short-hint : flag is set to 1 if reads in the pair point outward
-    sra:
-        ui-name : flag is set to 1 if reads in the pair point outward
-        short-hint : flag is set to 1 if reads in the pair point outward
     insert_size:
         ui-name : Insert size
         short-hint : Insert size

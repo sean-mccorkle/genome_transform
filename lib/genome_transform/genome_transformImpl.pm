@@ -1,9 +1,8 @@
 package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
-
 # Use Semantic Versioning (2.0.0-rc.1)
-# http://semver.org
+# http://semver.org 
 our $VERSION = "0.1.0";
 
 =head1 NAME
@@ -758,7 +757,6 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
-	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -782,7 +780,6 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
-	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -952,7 +949,6 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
-	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -976,7 +972,6 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	file_path_list has a value which is a reference to a list where each element is a string
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
-	sra has a value which is a string
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
@@ -1124,7 +1119,7 @@ sub sra_reads_to_assembly
 
 
 
-=head2 version
+=head2 version 
 
   $return = $obj->version()
 
@@ -1772,7 +1767,6 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
-sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
@@ -1790,7 +1784,6 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
-sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
@@ -1820,7 +1813,6 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
-sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
@@ -1838,7 +1830,6 @@ reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
-sra has a value which is a string
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float

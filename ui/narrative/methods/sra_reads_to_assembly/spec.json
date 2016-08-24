@@ -38,21 +38,6 @@
           }
         },
         {
-         "field_type" : "checkbox",
-         "allow_multiple" : false,
-         "optional" : false,
-         "id" : "sra",
-         "advanced" : false,
-         "default_values" : [1],
-          "checkbox_options" : {
-            "unchecked_value" : 0,
-            "checked_value" : 1
-          },
-          "text_options" : {
-            "valid_ws_types" : []
-          }
-        },
-        {
             "id" : "reads_id",
             "optional" : false,
             "advanced" : false,
@@ -125,10 +110,6 @@
                 {
                     "input_parameter": "outward",
                     "target_property": "outward"
-                },
-                {
-                    "input_parameter": "sra",
-                    "target_property": "sra"
                 },
                 {
                     "input_parameter": "insert_size",

@@ -160,7 +160,6 @@ module genome_transform {
         list <string> file_path_list;
         workspace_id workspace;
         object_id reads_id;
-        string sra;
         string outward;
         float insert_size;
         float std_dev;
@@ -174,7 +173,6 @@ module genome_transform {
         list <string> file_path_list;
         workspace_id workspace;
         object_id reads_id;
-        string sra;
         string outward;
         float insert_size;
         float std_dev;
