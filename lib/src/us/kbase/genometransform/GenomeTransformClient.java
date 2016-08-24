@@ -211,12 +211,12 @@ public class GenomeTransformClient {
      * <p>Original spec-file function name: sra_reads_to_assembly</p>
      * <pre>
      * </pre>
-     * @param   arg1   instance of type {@link us.kbase.genometransform.ReadsToAssemblyParams ReadsToAssemblyParams} (original type "reads_to_assembly_params")
+     * @param   arg1   instance of type {@link us.kbase.genometransform.SraReadsToAssemblyParams SraReadsToAssemblyParams} (original type "sra_reads_to_assembly_params")
      * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public String sraReadsToAssembly(ReadsToAssemblyParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public String sraReadsToAssembly(SraReadsToAssemblyParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(arg1);
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};

@@ -524,7 +524,7 @@ object_id is a string
 
 =head2 sra_reads_to_assembly
 
-  $return = $obj->sra_reads_to_assembly($reads_to_assembly_params)
+  $return = $obj->sra_reads_to_assembly($sra_reads_to_assembly_params)
 
 =over 4
 
@@ -533,9 +533,9 @@ object_id is a string
 =begin html
 
 <pre>
-$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
 $return is a genome_transform.object_id
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -556,9 +556,9 @@ object_id is a string
 
 =begin text
 
-$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
+$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
 $return is a genome_transform.object_id
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -596,10 +596,10 @@ object_id is a string
 							       "Invalid argument count for function sra_reads_to_assembly (received $n, expecting 1)");
     }
     {
-	my($reads_to_assembly_params) = @args;
+	my($sra_reads_to_assembly_params) = @args;
 
 	my @_bad_arguments;
-        (ref($reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"reads_to_assembly_params\" (value was \"$reads_to_assembly_params\")");
+        (ref($sra_reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"sra_reads_to_assembly_params\" (value was \"$sra_reads_to_assembly_params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to sra_reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -1091,6 +1091,37 @@ a float
 
 
 
+=head2 sra
+
+=over 4
+
+
+
+=item Description
+
+sequence type
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
 =head2 genbank_to_genome_params
 
 =over 4
@@ -1253,6 +1284,52 @@ file_path file_path - optional path to genbank file on local file system
 workspace_id workspace - workspace where object will be saved
 object_id reads_id - workspace ID to which the genome object should be saved
 object_id contigset_id - workspace ID to which the contigs should be saved
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 sra_reads_to_assembly_params
+
+=over 4
+
 
 
 =item Definition
