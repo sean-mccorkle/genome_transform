@@ -35,16 +35,16 @@ my @comp_fastas = (
 
 );
 
-print "begin fasta_to_contig test\n";
-
-foreach my $input_parms ( @comp_fastas )
-   {
-    eval {
-          my $ret =$impl->fasta_to_contig( $input_parms );
-        };
-   }
-
-print "end fasta_to_contigtest\n";
+#print "begin fasta_to_contig test\n";
+#
+#foreach my $input_parms ( @comp_fastas )
+#   {
+#    #eval {
+#          my $ret =$impl->fasta_to_contig( $input_parms );
+#    #    };
+#   }
+#
+#print "end fasta_to_contigtest\n";
 
 my @comp_tsv = (
    {
@@ -56,16 +56,16 @@ my @comp_tsv = (
    }
 );
 
-print "begin tsv_to_exp test\n";
-
-foreach my $input_parms ( @comp_tsv )
-   {
-    eval {
-          my $ret = $impl->tsv_to_exp( $input_parms );
-         };
-   }
-
-print "end tsv_to_exp test\n";
+#print "begin tsv_to_exp test\n";
+#
+#foreach my $input_parms ( @comp_tsv )
+#   {
+#    #eval {
+#          my $ret = $impl->tsv_to_exp( $input_parms );
+#    #     };
+#   }
+#
+#print "end tsv_to_exp test\n";
 
 my @comp_gbks = (
    {
@@ -105,9 +105,9 @@ print "begin genbank_to_genome test\n";
 
 foreach my $input_parms ( @comp_gbks )
    {
-    eval {
+    #eval {
           my $ret =$impl->genbank_to_genome( $input_parms );
-        };
+    #    };
    }
 
 print "end genbank_to_genome test\n";
@@ -179,12 +179,12 @@ my @comp_fastqs = (
 print "begin reads_to_assembly test\n";
 foreach my $input_parms ( @comp_fastqs )
    {
-    eval {
+    #eval {
           { my $ret = $impl->reads_to_assembly( $input_parms );
             print "returns\n"; 
             print Dumper( $ret ); 
           }
-         };
+    #     };
    }
 print "end reads_to_assembly test\n";
 

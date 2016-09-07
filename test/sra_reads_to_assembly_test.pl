@@ -25,11 +25,11 @@ $input_sra = {
 
     reads_shock_ref => 'https://ci.kbase.us/services/shock-api/',
     reads_handle_ref => 'https://ci.kbase.us/services/handle_servce',
-    #reads_type => 'PairedEndLibrary',
-    reads_type => 'SingleEndLibrary',
+    reads_type => 'PairedEndLibrary',
+    #reads_type => 'SingleEndLibrary',
     file_path_list => [ '/kb/module/data/SRR3944606.sra' ],
     workspace => '9196',
-    reads_id => 'ThridSRAreads',
+    reads_id => 'ForthSRAreads',
     # string outward;
     # float insert_size;
     # float std_dev;
