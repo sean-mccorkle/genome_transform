@@ -76,6 +76,9 @@ module genome_transform {
 	typedef string sra;
 
 
+
+
+
 	/*
         Input parameters for the "genbank_to_genome" function.
 
@@ -153,11 +156,26 @@ module genome_transform {
         object_id contigset_id - workspace ID to which the contigs should be saved
    */
 
+    typedef structure{
+
+       string domain;
+       string platform;
+       string sample_id;
+       string condition;
+       string source;
+       string Library_type;
+       string publication_Id;
+       string external_source_date;
+       string sra;
+
+    }rnaSeqMeta;
+
     typedef structure {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
         list <string> file_path_list;
+        mapping <string, rnaSeqMeta> rnaSeqMetaData;
         workspace_id workspace;
         object_id reads_id;
         string outward;
@@ -166,7 +184,17 @@ module genome_transform {
 
    }reads_to_assembly_params;
 
-    typedef structure {
+
+   typedef structure {
+   		workspace_id workspace;
+   		string domain;
+   		string sampleset_id;
+       	string sampleset_desc;
+   		list <reads_to_assembly_params> rnaSeqMeta;
+   }rna_sample_set_params;
+
+
+   typedef structure {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
@@ -183,4 +211,5 @@ module genome_transform {
 
    funcdef sra_reads_to_assembly(sra_reads_to_assembly_params) returns (object_id) authentication required;
 
+   funcdef rna_sample_set(rna_sample_set_params) returns (object_id) authentication required;
 };
