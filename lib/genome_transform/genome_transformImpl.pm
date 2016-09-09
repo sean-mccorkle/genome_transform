@@ -2,10 +2,10 @@ package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
 # Use Semantic Versioning (2.0.0-rc.1)
-# http://semver.org
+# http://semver.org 
 our $VERSION = "0.0.1";
-our $GIT_URL = "https://github.com/janakagithub/genome_transform";
-our $GIT_COMMIT_HASH = "a752d4c085e9935ae93aadaac12069a0a821669a";
+our $GIT_URL = "https://github.com/sean-mccorkle/genome_transform.git";
+our $GIT_COMMIT_HASH = "5471fc04f9e06d38e4dc194cae9949459a7b1a06";
 
 =head1 NAME
 
@@ -1368,7 +1368,7 @@ sub rna_sample_set
 
 
 
-=head2 status
+=head2 status 
 
   $return = $obj->status()
 

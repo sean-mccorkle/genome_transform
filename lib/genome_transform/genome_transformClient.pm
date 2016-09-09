@@ -187,9 +187,10 @@ object_id is a string
 	}
     }
 
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.genbank_to_genome",
-	params => \@args,
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.genbank_to_genome",
+	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
@@ -288,9 +289,10 @@ object_id is a string
 	}
     }
 
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.fasta_to_contig",
-	params => \@args,
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.fasta_to_contig",
+	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
@@ -389,9 +391,10 @@ object_id is a string
 	}
     }
 
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.tsv_to_exp",
-	params => \@args,
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.tsv_to_exp",
+	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
@@ -431,6 +434,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -438,6 +442,16 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
+	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -454,6 +468,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -461,6 +476,16 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
+	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -498,9 +523,10 @@ object_id is a string
 	}
     }
 
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.reads_to_assembly",
-	params => \@args,
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.reads_to_assembly",
+	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
@@ -607,9 +633,10 @@ object_id is a string
 	}
     }
 
-    my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-	method => "genome_transform.sra_reads_to_assembly",
-	params => \@args,
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.sra_reads_to_assembly",
+	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
@@ -629,7 +656,181 @@ object_id is a string
     }
 }
  
+
+
+=head2 rna_sample_set
+
+  $return = $obj->rna_sample_set($rna_sample_set_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$rna_sample_set_params is a genome_transform.rna_sample_set_params
+$return is a genome_transform.object_id
+rna_sample_set_params is a reference to a hash where the following keys are defined:
+	workspace has a value which is a genome_transform.workspace_id
+	domain has a value which is a string
+	sampleset_id has a value which is a string
+	sampleset_desc has a value which is a string
+	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+workspace_id is a string
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
+	reads_shock_ref has a value which is a genome_transform.shock_ref
+	reads_handle_ref has a value which is a genome_transform.handle_ref
+	reads_type has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+	workspace has a value which is a genome_transform.workspace_id
+	reads_id has a value which is a genome_transform.object_id
+	outward has a value which is a string
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+shock_ref is a string
+handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
+	sra has a value which is a string
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$rna_sample_set_params is a genome_transform.rna_sample_set_params
+$return is a genome_transform.object_id
+rna_sample_set_params is a reference to a hash where the following keys are defined:
+	workspace has a value which is a genome_transform.workspace_id
+	domain has a value which is a string
+	sampleset_id has a value which is a string
+	sampleset_desc has a value which is a string
+	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+workspace_id is a string
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
+	reads_shock_ref has a value which is a genome_transform.shock_ref
+	reads_handle_ref has a value which is a genome_transform.handle_ref
+	reads_type has a value which is a string
+	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+	workspace has a value which is a genome_transform.workspace_id
+	reads_id has a value which is a genome_transform.object_id
+	outward has a value which is a string
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+shock_ref is a string
+handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
+	sra has a value which is a string
+object_id is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub rna_sample_set
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function rna_sample_set (received $n, expecting 1)");
+    }
+    {
+	my($rna_sample_set_params) = @args;
+
+	my @_bad_arguments;
+        (ref($rna_sample_set_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"rna_sample_set_params\" (value was \"$rna_sample_set_params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to rna_sample_set:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'rna_sample_set');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.rna_sample_set",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'rna_sample_set',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method rna_sample_set",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'rna_sample_set',
+				       );
+    }
+}
+ 
   
+sub status
+{
+    my($self, @args) = @_;
+    if ((my $n = @args) != 0) {
+        Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+                                   "Invalid argument count for function status (received $n, expecting 0)");
+    }
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+        method => "genome_transform.status",
+        params => \@args,
+    });
+    if ($result) {
+        if ($result->is_error) {
+            Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+                           code => $result->content->{error}->{code},
+                           method_name => 'status',
+                           data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+                          );
+        } else {
+            return wantarray ? @{$result->result} : $result->result->[0];
+        }
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method status",
+                        status_line => $self->{client}->status_line,
+                        method_name => 'status',
+                       );
+    }
+}
+   
 
 sub version {
     my ($self) = @_;
@@ -642,16 +843,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'sra_reads_to_assembly',
+                method_name => 'rna_sample_set',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method sra_reads_to_assembly",
+            error => "Error invoking method rna_sample_set",
             status_line => $self->{client}->status_line,
-            method_name => 'sra_reads_to_assembly',
+            method_name => 'rna_sample_set',
         );
     }
 }
@@ -1269,7 +1470,7 @@ expMaxId has a value which is a genome_transform.object_id
 
 
 
-=head2 reads_to_assembly_params
+=head2 rnaSeqMeta
 
 =over 4
 
@@ -1292,10 +1493,57 @@ object_id contigset_id - workspace ID to which the contigs should be saved
 
 <pre>
 a reference to a hash where the following keys are defined:
+domain has a value which is a string
+platform has a value which is a string
+sample_id has a value which is a string
+condition has a value which is a string
+source has a value which is a string
+Library_type has a value which is a string
+publication_Id has a value which is a string
+external_source_date has a value which is a string
+sra has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+domain has a value which is a string
+platform has a value which is a string
+sample_id has a value which is a string
+condition has a value which is a string
+source has a value which is a string
+Library_type has a value which is a string
+publication_Id has a value which is a string
+external_source_date has a value which is a string
+sra has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 reads_to_assembly_params
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
 reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
 outward has a value which is a string
@@ -1313,11 +1561,50 @@ reads_shock_ref has a value which is a genome_transform.shock_ref
 reads_handle_ref has a value which is a genome_transform.handle_ref
 reads_type has a value which is a string
 file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 workspace has a value which is a genome_transform.workspace_id
 reads_id has a value which is a genome_transform.object_id
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 rna_sample_set_params
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+workspace has a value which is a genome_transform.workspace_id
+domain has a value which is a string
+sampleset_id has a value which is a string
+sampleset_desc has a value which is a string
+rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+workspace has a value which is a genome_transform.workspace_id
+domain has a value which is a string
+sampleset_id has a value which is a string
+sampleset_desc has a value which is a string
+rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
 
 
 =end text
