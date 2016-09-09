@@ -20,11 +20,11 @@ $genome_transform::genome_transformServer::CallContext = $ctx;
 my $impl = new genome_transform::genome_transformImpl();
 
 my $input;
-
+my $mws = 'janakakbase:1466007346399';
 $input = {
-    genbank_file_path => '/data/bulktest/data/bulktest/janakakbase/NC_003197.gbk',
+    genbank_file_path => '/kb/module/data/NC_003197.gbk',
     genbank_shock_ref => 'https://ci.kbase.us/services/shock-api',
-    workspace => 'janakakbase:1464032798535',
+    workspace => $mws,
     genome_id => 'NC_003197',
     contigset_id => 'NC_003197Contig'
 };
@@ -34,7 +34,7 @@ my $input_fasta;
 $input_fasta = {
     fasta_file_path => '/kb/module/data/',
     fasta_shock_ref => 'https://ci.kbase.us/services/shock-api',
-    workspace => 'janakakbase:1464032798535',
+    workspace => $mws,
     genome_id => 'fasciculatum',
     contigset_id => 'fasciculatum_ContigSet'
 };
@@ -44,14 +44,102 @@ my $input_exp;
 $input_exp = {
     tsvexp_file_path => '/kb/module/data/',
     tsvexp_shock_ref => 'https://ci.kbase.us/services/shock-api',
-    workspace => 'janakakbase:1464032798535',
+    workspace => $mws,
     genome_id => 'acetobacterium',
     expMaxId => 'AcetoExpMatrix'
 };
 
-#$input =[$sR,$fp,$ws, $gId, $conId];
+
+   my $RNASeqSampleSetMeta = {
+       domain =>"",
+       platform =>"",
+       sample_id => "one",
+       condition => "Control",
+       source => "",
+       Library_type => "",
+       publication_Id => "",
+       external_source_date=> ""
+    };
+
+   my $RNASeqSampleSetMeta1 = {
+
+       domain =>"",
+       platform =>"",
+       sample_id => "two",
+       condition => "Control",
+       source => "",
+       Library_type => "",
+       publication_Id => "",
+       external_source_date=> ""
+    };
+    my $RNASeqSampleSetMeta2 = {
+
+       domain =>"",
+       platform =>"",
+       sample_id => "two",
+       condition => "Control",
+       source => "",
+       Library_type => "",
+       publication_Id => "",
+       external_source_date=> ""
+    };
+
+  $RNASeqSampleSetMeta->{domain} = 'Bacterial';
+  $RNASeqSampleSetMeta->{platform} = 'illumina';
+  $RNASeqSampleSetMeta->{source} = 'prokaryote';
+  $RNASeqSampleSetMeta1->{domain} = 'Bacterial';
+  $RNASeqSampleSetMeta1->{platform} = 'illumina';
+  $RNASeqSampleSetMeta1->{source} = 'prokaryote';
+
+my $input_PE_reads = {
+    workspace => $mws,
+    reads_shock_ref => 'https://ci.kbase.us/services/shock-api',
+    reads_handle_ref => 'https://ci.kbase.us/services/handle_service',
+    file_path_list => ['/kb/module/data/frag_1.fastq','/kb/module/data/frag_2.fastq'],
+    reads_id => 'short_test_reads',
+    reads_type => 'PairedEndLibrary',
+    rnaSeqMetaData => $RNASeqSampleSetMeta
+};
+
+my $input_PE_reads1 = {
+    workspace => $mws,
+    reads_shock_ref => 'https://ci.kbase.us/services/shock-api',
+    reads_handle_ref => 'https://ci.kbase.us/services/handle_service',
+    file_path_list => ['/kb/module/data/short_1.fastq','/kb/module/data/short_2.fastq'],
+    reads_id => 'short_test_reads1',
+    reads_type => 'PairedEndLibrary',
+    rnaSeqMetaData => $RNASeqSampleSetMeta1
+};
+
+my $input_PE_reads2 = {
+    workspace => $mws,
+    reads_shock_ref => 'https://ci.kbase.us/services/shock-api',
+    reads_handle_ref => 'https://ci.kbase.us/services/handle_service',
+    file_path_list => ['/kb/module/data/shortx_1.fastq.gz','/kb/module/data/shortx_2.fastq.gz'],
+    reads_id => 'short_test_reads2',
+    reads_type => 'PairedEndLibrary',
+    rnaSeqMetaData => $RNASeqSampleSetMeta2
+};
+
+
+my $rnaSetMetaList = {
+
+    workspace => $mws,
+    domain => "Prokaryotes",
+    rnaSeqMeta => [$input_PE_reads1, $input_PE_reads2],
+    sampleset_id => "testingSampleSet",
+    sampleset_desc => "bulk upload rnaSeq SampleSet"
+};
+
 eval {
-my $ret =$impl->tsv_to_exp($input_exp);
+   #my $ret =$impl->reads_to_assembly($input_PE_reads);
+   my $ret =$impl->rna_sample_set($rnaSetMetaList);
+
+
+};
+
+eval {
+#my $ret =$impl->tsv_to_exp($input_exp);
 
 };
 
