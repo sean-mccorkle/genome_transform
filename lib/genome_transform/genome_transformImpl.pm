@@ -1287,12 +1287,6 @@ sub rna_sample_set
     my $provenance=$ctx->provenance;
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
-    my $robj=$wsClient->get_objects([{wsid=>9196, name=>'mySecondReadsObjUpload'}])->[0];
-
-    print "its here \n";
-    print &Dumper ($rna_sample_set_params);
-
-
     print "starting creating rna_sample_set method..\n";
 
     my @sample_refs;
