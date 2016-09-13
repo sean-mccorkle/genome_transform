@@ -5,7 +5,7 @@ use Bio::KBase::Exceptions;
 # http://semver.org
 our $VERSION = "0.0.1";
 our $GIT_URL = "https://github.com/janakagithub/genome_transform";
-our $GIT_COMMIT_HASH = "a752d4c085e9935ae93aadaac12069a0a821669a";
+our $GIT_COMMIT_HASH = "fe1df0ace65d30e042bb022ec2305eabde3582e3";
 
 =head1 NAME
 
@@ -381,14 +381,8 @@ sub genbank_to_genome
 
 
 ################################
-system ("ls /data/");
-system ("ls /data/bulktest/data/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/expmax/");
-system ("ls /data/bulktest/data/bulktest/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
 
-
+system ("ls /data/bulktest");
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
@@ -524,10 +518,7 @@ sub fasta_to_contig
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-system ("ls /data/");
-system ("ls /data/bulktest/data/bulktest/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
+system ("ls /data/bulktest/");
 #my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
 my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
 print "cmd is ", Dumper( $cmd );
@@ -704,18 +695,12 @@ my $std = 60+0;
 ################################
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-system ("ls /data/");
-system ("ls /data/bulktest/data/bulktest/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/");
-system ("ls /data/bulktest/data/bulktest/janakakbase/fasta/");
-
+system ("ls /data/bulktest/");
 #my $cmd = q{/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory $expDirTest};
 system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory  $expDir ");
 
 #system $cmd;
 #################################
-
-die;
 my $json;
 
 {
@@ -794,7 +779,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -828,7 +812,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -977,7 +960,7 @@ sub reads_to_assembly
 
 =head2 sra_reads_to_assembly
 
-  $return = $obj->sra_reads_to_assembly($sra_reads_to_assembly_params)
+  $return = $obj->sra_reads_to_assembly($reads_to_assembly_params)
 
 =over 4
 
@@ -986,13 +969,14 @@ sub reads_to_assembly
 =begin html
 
 <pre>
-$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
 $return is a genome_transform.object_id
-sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -1000,6 +984,15 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -1009,13 +1002,14 @@ object_id is a string
 
 =begin text
 
-$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
 $return is a genome_transform.object_id
-sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -1023,6 +1017,15 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -1042,10 +1045,10 @@ object_id is a string
 sub sra_reads_to_assembly
 {
     my $self = shift;
-    my($sra_reads_to_assembly_params) = @_;
+    my($reads_to_assembly_params) = @_;
 
     my @_bad_arguments;
-    (ref($sra_reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"sra_reads_to_assembly_params\" (value was \"$sra_reads_to_assembly_params\")");
+    (ref($reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"reads_to_assembly_params\" (value was \"$reads_to_assembly_params\")");
     if (@_bad_arguments) {
 	my $msg = "Invalid arguments passed to sra_reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -1062,13 +1065,13 @@ sub sra_reads_to_assembly
     #print "workspace is ", $self->{'workspace-url'}, "\ntoken is ", $token, "\n";
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
-    my $file_path = $sra_reads_to_assembly_params->{file_path_list};
-    my $workspace = $sra_reads_to_assembly_params->{workspace};
-    my $reads_id = $sra_reads_to_assembly_params->{reads_id};
-    my $reads_type = $sra_reads_to_assembly_params->{reads_type};
-    my $std = $sra_reads_to_assembly_params->{std_dev};
-    my $is = $sra_reads_to_assembly_params->{insert_size};
-    print &Dumper ($sra_reads_to_assembly_params);
+    my $file_path = $reads_to_assembly_params->{file_path_list};
+    my $workspace = $reads_to_assembly_params->{workspace};
+    my $reads_id = $reads_to_assembly_params->{reads_id};
+    my $reads_type = $reads_to_assembly_params->{reads_type};
+    my $std = $reads_to_assembly_params->{std_dev};
+    my $is = $reads_to_assembly_params->{insert_size};
+    print &Dumper ($reads_to_assembly_params);
 
     print "\n\nstarting SRA reads to assembly method.....\n\n";
     my $tmpDir = "/kb/module/work/tmp";
@@ -1183,9 +1186,9 @@ rna_sample_set_params is a reference to a hash where the following keys are defi
 	domain has a value which is a string
 	sampleset_id has a value which is a string
 	sampleset_desc has a value which is a string
-	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+	rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 workspace_id is a string
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+rnaseq_sequence_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -1196,6 +1199,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
+	sra has a value which is an int
 shock_ref is a string
 handle_ref is a string
 rnaSeqMeta is a reference to a hash where the following keys are defined:
@@ -1207,7 +1211,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 object_id is a string
 
 </pre>
@@ -1223,9 +1226,9 @@ rna_sample_set_params is a reference to a hash where the following keys are defi
 	domain has a value which is a string
 	sampleset_id has a value which is a string
 	sampleset_desc has a value which is a string
-	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+	rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 workspace_id is a string
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+rnaseq_sequence_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -1236,6 +1239,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
+	sra has a value which is an int
 shock_ref is a string
 handle_ref is a string
 rnaSeqMeta is a reference to a hash where the following keys are defined:
@@ -1247,7 +1251,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 object_id is a string
 
 
@@ -1284,6 +1287,12 @@ sub rna_sample_set
     my $provenance=$ctx->provenance;
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
+    my $robj=$wsClient->get_objects([{wsid=>9196, name=>'mySecondReadsObjUpload'}])->[0];
+
+    print "its here \n";
+    print &Dumper ($rna_sample_set_params);
+
+
     print "starting creating rna_sample_set method..\n";
 
     my @sample_refs;
@@ -1291,25 +1300,53 @@ sub rna_sample_set
     my $num_samples=0;
     my $num_replicates=0;
 
-    foreach my $r (@{$rna_sample_set_params->{rnaSeqMeta}}){
+    foreach my $r (@{$rna_sample_set_params->{rnaSeqSample}}){
 
       print "now uploading $r->{reads_id} \n";
-      my $reads_upload_status = $implr->reads_to_assembly($r);
+
+      if ($r->{sra} == 0){
 
 
-      if (defined $reads_upload_status){
+          my $reads_upload_status = $implr->reads_to_assembly($r);
 
-        print "Reads id $r->{reads_id} referenced $reads_upload_status sucessfully uploaded... continuing\n";
-        push (@sample_refs, $r->{reads_id});
-        push (@sample_conditions, $r->{rnaSeqMetaData}->{condition});
-        $num_samples++;
-        $num_replicates++;
+          if (defined $reads_upload_status){
+
+            print "Reads id $r->{reads_id} referenced $reads_upload_status sucessfully uploaded... continuing\n";
+            push (@sample_refs, $r->{reads_id});
+            push (@sample_conditions, $r->{rnaSeqSample}->{rnaSeqMetaData}->{condition});
+            $num_samples++;
+            $num_replicates++;
+          }
+           else{
+
+            print "Reads id $r->{reads_id} did not upload properly into the narrative and will not be included in the RnaSeq Sample Set\n";
+            next;
+          }
       }
-       else{
+      elsif ($r->{sra} == 1){
+          my $reads_upload_status = $implr->sra_reads_to_assembly($r);
 
-        print "Reads id $r->{reads_id} did not upload properly into the narrative and will not be included in the RnaSeq Sample Set\n";
+          if (defined $reads_upload_status){
+
+            print "Reads id $r->{reads_id} referenced $reads_upload_status sucessfully uploaded... continuing\n";
+            push (@sample_refs, $r->{reads_id});
+            push (@sample_conditions, $r->{rnaSeqSample}->{rnaSeqMetaData}->{condition});
+            $num_samples++;
+            $num_replicates++;
+          }
+           else{
+
+            print "Reads id $r->{reads_id} did not upload properly into the narrative and will not be included in the RnaSeq Sample Set\n";
+            next;
+          }
+      }
+      else{
+
+        print "reads classification (sra or none-sra) not given, moving to next read set..\n";
         next;
       }
+
+
 
     }
 
@@ -1350,7 +1387,7 @@ sub rna_sample_set
         die "Error saving modified genome object to workspace:\n".$@;
     }
 
-     print "finishing the method uploading and creating a rnaSet sample set\n";
+     print "\n\nfinishing the method uploading reads sets and creating a RnaSeq sample set $obj_info_list->[0]->[1]\n\n";
      print &Dumper ($obj_info_list);
 
     $return = $rnaSeqSet->{sampleset_id};
@@ -1830,6 +1867,271 @@ sequence type
 =begin html
 
 <pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
+=head2 domain
+
+=over 4
+
+
+
+=item Description
+
+Rna Seq metadata
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 platform
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sample_id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 condition
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 source
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 Library_type
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 publication_Id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 external_source_date
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sampleset_id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sampleset_desc
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
 a string
 </pre>
 
@@ -2023,7 +2325,6 @@ source has a value which is a string
 Library_type has a value which is a string
 publication_Id has a value which is a string
 external_source_date has a value which is a string
-sra has a value which is a string
 
 </pre>
 
@@ -2040,7 +2341,6 @@ source has a value which is a string
 Library_type has a value which is a string
 publication_Id has a value which is a string
 external_source_date has a value which is a string
-sra has a value which is a string
 
 
 =end text
@@ -2097,6 +2397,56 @@ std_dev has a value which is a float
 
 
 
+=head2 rnaseq_sequence_params
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+sra has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+sra has a value which is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 rna_sample_set_params
 
 =over 4
@@ -2113,7 +2463,7 @@ workspace has a value which is a genome_transform.workspace_id
 domain has a value which is a string
 sampleset_id has a value which is a string
 sampleset_desc has a value which is a string
-rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 
 </pre>
 
@@ -2126,53 +2476,7 @@ workspace has a value which is a genome_transform.workspace_id
 domain has a value which is a string
 sampleset_id has a value which is a string
 sampleset_desc has a value which is a string
-rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
-
-
-=end text
-
-=back
-
-
-
-=head2 sra_reads_to_assembly_params
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-reads_shock_ref has a value which is a genome_transform.shock_ref
-reads_handle_ref has a value which is a genome_transform.handle_ref
-reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
-workspace has a value which is a genome_transform.workspace_id
-reads_id has a value which is a genome_transform.object_id
-outward has a value which is a string
-insert_size has a value which is a float
-std_dev has a value which is a float
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-reads_shock_ref has a value which is a genome_transform.shock_ref
-reads_handle_ref has a value which is a genome_transform.handle_ref
-reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
-workspace has a value which is a genome_transform.workspace_id
-reads_id has a value which is a genome_transform.object_id
-outward has a value which is a string
-insert_size has a value which is a float
-std_dev has a value which is a float
+rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 
 
 =end text

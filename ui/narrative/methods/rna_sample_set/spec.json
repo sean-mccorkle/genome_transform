@@ -1,0 +1,230 @@
+{   "ver": "1.0.0",
+
+    "authors": [
+        "janaka"
+    ],
+    "contact": "help@kbase.us",
+    "visible": false,
+    "categories": ["active","upload"],
+    "widgets": {
+        "input": null,
+        "output": "kbaseReportView"
+    },
+    "parameters": [
+        {
+            "id" : "file_path_list",
+            "optional" : false,
+            "advanced" : false,
+            "allow_multiple" : true,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+         "field_type" : "checkbox",
+         "allow_multiple" : false,
+         "optional" : false,
+         "id" : "outward",
+         "advanced" : false,
+         "default_values" : [0],
+          "checkbox_options" : {
+            "unchecked_value" : 0,
+            "checked_value" : 1
+          },
+          "text_options" : {
+            "valid_ws_types" : []
+          }
+        },
+        {
+            "id" : "reads_id",
+            "optional" : false,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : ["KBaseAssembly.PairedEndLibrary"],
+                "is_output_name":true
+
+            }
+        },
+        {
+            "id" : "insert_size",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "300" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "domain",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "Microbial" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "platform",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "condition",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "source",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "Library_type",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "publication_Id",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "external_source_date",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "sra",
+            "optional" : false,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "0" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "sampleset_id",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "0" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "sampleset_desc",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "0" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "std_dev",
+            "optional" : true,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "60" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        },
+        {
+            "id" : "reads_type",
+            "optional" : false,
+            "advanced" : false,
+            "allow_multiple" : false,
+            "default_values" : [ "PairedEndLibrary" ],
+            "field_type" : "text",
+            "text_options" : {
+                "valid_ws_types" : [ ]
+            }
+        }
+    ],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "genome_transform",
+            "method": "rna_sample_set",
+            "input_mapping": [
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace"
+                },
+                {
+                    "input_parameter": "domain",
+                    "target_property": "domain"
+                }
+
+            ],
+            "output_mapping": [
+                {
+                  "narrative_system_variable": "workspace",
+                  "target_property": "ws"
+                },
+                {
+                  "constant_value": "KBaseAssembly.PairedEndLibrary",
+                  "target_property": "type"
+                },
+                {
+                    "constant_value": "16",
+                    "target_property": "report_window_line_height"
+                }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}

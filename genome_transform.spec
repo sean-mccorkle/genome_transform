@@ -73,8 +73,22 @@ module genome_transform {
 	/*
 		sequence type
 	*/
-	typedef string sra;
+	typedef int sra;
 
+	/*
+		Rna Seq metadata
+
+	*/
+	typedef   string domain;
+    typedef   string platform;
+    typedef   string sample_id;
+    typedef   string condition;
+    typedef   string source;
+    typedef   string Library_type;
+    typedef   string publication_Id;
+    typedef   string external_source_date;
+    typedef	  string sampleset_id;
+    typedef   string sampleset_desc;
 
 
 
@@ -156,7 +170,8 @@ module genome_transform {
         object_id contigset_id - workspace ID to which the contigs should be saved
    */
 
-    typedef structure{
+
+   typedef structure{
 
        string domain;
        string platform;
@@ -166,11 +181,10 @@ module genome_transform {
        string Library_type;
        string publication_Id;
        string external_source_date;
-       string sra;
 
-    }rnaSeqMeta;
+   }rnaSeqMeta;
 
-    typedef structure {
+   typedef structure {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
@@ -186,30 +200,30 @@ module genome_transform {
 
 
    typedef structure {
-   		workspace_id workspace;
-   		string domain;
-   		string sampleset_id;
-       	string sampleset_desc;
-   		list <reads_to_assembly_params> rnaSeqMeta;
-   }rna_sample_set_params;
-
-
-   typedef structure {
 		shock_ref reads_shock_ref;
         handle_ref reads_handle_ref;
         string reads_type;
         list <string> file_path_list;
+        mapping <string, rnaSeqMeta> rnaSeqMetaData;
         workspace_id workspace;
         object_id reads_id;
         string outward;
         float insert_size;
         float std_dev;
+        int sra;
+   }rnaseq_sequence_params;
 
-   }sra_reads_to_assembly_params;
+   typedef structure {
+   		workspace_id workspace;
+   		string domain;
+   		string sampleset_id;
+       	string sampleset_desc;
+   		list <rnaseq_sequence_params> rnaSeqSample;
+   }rna_sample_set_params;
 
    funcdef reads_to_assembly(reads_to_assembly_params) returns (object_id) authentication required;
 
-   funcdef sra_reads_to_assembly(sra_reads_to_assembly_params) returns (object_id) authentication required;
+   funcdef sra_reads_to_assembly(reads_to_assembly_params) returns (object_id) authentication required;
 
    funcdef rna_sample_set(rna_sample_set_params) returns (object_id) authentication required;
 };
