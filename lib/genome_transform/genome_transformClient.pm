@@ -26,8 +26,7 @@ genome_transform::genome_transformClient
 =head1 DESCRIPTION
 
 
-A KBase module: genome_transform
-This sample module contains one small method - filter_contigs.
+no luck finding this in kbase or kbaseapps repos
 
 
 =cut
@@ -800,6 +799,222 @@ object_id is a string
     }
 }
  
+
+
+=head2 reads_to_library
+
+  $return = $obj->reads_to_library($reads_to_library_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$reads_to_library_params is a genome_transform.reads_to_library_params
+$return is a genome_transform.object_id
+reads_to_library_params is a reference to a hash where the following keys are defined:
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace_name has a value which is a string
+	workspace_id has a value which is an int
+	object_name has a value which is a string
+	object_id has a value which is an int
+	is_interleaved has a value which is an int
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+	orientation_outward has a value which is an int
+	sequencing_tech has a value which is a string
+	single_genome has a value which is an int
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$reads_to_library_params is a genome_transform.reads_to_library_params
+$return is a genome_transform.object_id
+reads_to_library_params is a reference to a hash where the following keys are defined:
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace_name has a value which is a string
+	workspace_id has a value which is an int
+	object_name has a value which is a string
+	object_id has a value which is an int
+	is_interleaved has a value which is an int
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+	orientation_outward has a value which is an int
+	sequencing_tech has a value which is a string
+	single_genome has a value which is an int
+object_id is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub reads_to_library
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function reads_to_library (received $n, expecting 1)");
+    }
+    {
+	my($reads_to_library_params) = @args;
+
+	my @_bad_arguments;
+        (ref($reads_to_library_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"reads_to_library_params\" (value was \"$reads_to_library_params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'reads_to_library');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.reads_to_library",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'reads_to_library',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method reads_to_library",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'reads_to_library',
+				       );
+    }
+}
+ 
+
+
+=head2 sra_reads_to_library
+
+  $return = $obj->sra_reads_to_library($reads_to_library_params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$reads_to_library_params is a genome_transform.reads_to_library_params
+$return is a genome_transform.object_id
+reads_to_library_params is a reference to a hash where the following keys are defined:
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace_name has a value which is a string
+	workspace_id has a value which is an int
+	object_name has a value which is a string
+	object_id has a value which is an int
+	is_interleaved has a value which is an int
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+	orientation_outward has a value which is an int
+	sequencing_tech has a value which is a string
+	single_genome has a value which is an int
+object_id is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$reads_to_library_params is a genome_transform.reads_to_library_params
+$return is a genome_transform.object_id
+reads_to_library_params is a reference to a hash where the following keys are defined:
+	file_path_list has a value which is a reference to a list where each element is a string
+	workspace_name has a value which is a string
+	workspace_id has a value which is an int
+	object_name has a value which is a string
+	object_id has a value which is an int
+	is_interleaved has a value which is an int
+	insert_size has a value which is a float
+	std_dev has a value which is a float
+	orientation_outward has a value which is an int
+	sequencing_tech has a value which is a string
+	single_genome has a value which is an int
+object_id is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub sra_reads_to_library
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function sra_reads_to_library (received $n, expecting 1)");
+    }
+    {
+	my($reads_to_library_params) = @args;
+
+	my @_bad_arguments;
+        (ref($reads_to_library_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"reads_to_library_params\" (value was \"$reads_to_library_params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to sra_reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'sra_reads_to_library');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "genome_transform.sra_reads_to_library",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'sra_reads_to_library',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method sra_reads_to_library",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'sra_reads_to_library',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -843,16 +1058,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'rna_sample_set',
+                method_name => 'sra_reads_to_library',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method rna_sample_set",
+            error => "Error invoking method sra_reads_to_library",
             status_line => $self->{client}->status_line,
-            method_name => 'rna_sample_set',
+            method_name => 'sra_reads_to_library',
         );
     }
 }
@@ -1651,6 +1866,61 @@ reads_id has a value which is a genome_transform.object_id
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 reads_to_library_params
+
+=over 4
+
+
+
+=item Description
+
+these next methods use the new ReadsUtils module methods for uploading
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+file_path_list has a value which is a reference to a list where each element is a string
+workspace_name has a value which is a string
+workspace_id has a value which is an int
+object_name has a value which is a string
+object_id has a value which is an int
+is_interleaved has a value which is an int
+insert_size has a value which is a float
+std_dev has a value which is a float
+orientation_outward has a value which is an int
+sequencing_tech has a value which is a string
+single_genome has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+file_path_list has a value which is a reference to a list where each element is a string
+workspace_name has a value which is a string
+workspace_id has a value which is an int
+object_name has a value which is a string
+object_id has a value which is an int
+is_interleaved has a value which is an int
+insert_size has a value which is a float
+std_dev has a value which is a float
+orientation_outward has a value which is an int
+sequencing_tech has a value which is a string
+single_genome has a value which is an int
 
 
 =end text

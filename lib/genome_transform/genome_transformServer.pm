@@ -34,6 +34,8 @@ our %return_counts = (
         'reads_to_assembly' => 1,
         'sra_reads_to_assembly' => 1,
         'rna_sample_set' => 1,
+        'reads_to_library' => 1,
+        'sra_reads_to_library' => 1,
         'status' => 1,
 );
 
@@ -44,6 +46,8 @@ our %method_authentication = (
         'reads_to_assembly' => 'required',
         'sra_reads_to_assembly' => 'required',
         'rna_sample_set' => 'required',
+        'reads_to_library' => 'required',
+        'sra_reads_to_library' => 'required',
 );
 
 sub _build_valid_methods
@@ -56,6 +60,8 @@ sub _build_valid_methods
         'reads_to_assembly' => 1,
         'sra_reads_to_assembly' => 1,
         'rna_sample_set' => 1,
+        'reads_to_library' => 1,
+        'sra_reads_to_library' => 1,
         'status' => 1,
     };
     return $methods;

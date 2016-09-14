@@ -16,8 +16,7 @@ import us.kbase.common.service.UnauthorizedException;
 /**
  * <p>Original spec-file module name: genome_transform</p>
  * <pre>
- * A KBase module: genome_transform
- * This sample module contains one small method - filter_contigs.
+ * no luck finding this in kbase or kbaseapps repos
  * </pre>
  */
 public class GenomeTransformClient {
@@ -262,6 +261,40 @@ public class GenomeTransformClient {
         args.add(arg1);
         TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
         List<String> res = caller.jsonrpcCall("genome_transform.rna_sample_set", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: reads_to_library</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.genometransform.ReadsToLibraryParams ReadsToLibraryParams} (original type "reads_to_library_params")
+     * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String readsToLibrary(ReadsToLibraryParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("genome_transform.reads_to_library", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
+    /**
+     * <p>Original spec-file function name: sra_reads_to_library</p>
+     * <pre>
+     * </pre>
+     * @param   arg1   instance of type {@link us.kbase.genometransform.ReadsToLibraryParams ReadsToLibraryParams} (original type "reads_to_library_params")
+     * @return   instance of original type "object_id" (Name of an object in the KBase workspace)
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public String sraReadsToLibrary(ReadsToLibraryParams arg1, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(arg1);
+        TypeReference<List<String>> retType = new TypeReference<List<String>>() {};
+        List<String> res = caller.jsonrpcCall("genome_transform.sra_reads_to_library", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

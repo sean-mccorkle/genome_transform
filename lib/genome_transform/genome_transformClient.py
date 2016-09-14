@@ -197,6 +197,44 @@ class genome_transform(object):
             'genome_transform.rna_sample_set',
             [rna_sample_set_params], self._service_ver, context)
 
+    def reads_to_library(self, reads_to_library_params, context=None):
+        """
+        :param reads_to_library_params: instance of type
+           "reads_to_library_params" (these next methods use the new
+           ReadsUtils module methods for uploading) -> structure: parameter
+           "file_path_list" of list of String, parameter "workspace_name" of
+           String, parameter "workspace_id" of Long, parameter "object_name"
+           of String, parameter "object_id" of Long, parameter
+           "is_interleaved" of Long, parameter "insert_size" of Double,
+           parameter "std_dev" of Double, parameter "orientation_outward" of
+           Long, parameter "sequencing_tech" of String, parameter
+           "single_genome" of Long
+        :returns: instance of type "object_id" (Name of an object in the
+           KBase workspace)
+        """
+        return self._client.call_method(
+            'genome_transform.reads_to_library',
+            [reads_to_library_params], self._service_ver, context)
+
+    def sra_reads_to_library(self, reads_to_library_params, context=None):
+        """
+        :param reads_to_library_params: instance of type
+           "reads_to_library_params" (these next methods use the new
+           ReadsUtils module methods for uploading) -> structure: parameter
+           "file_path_list" of list of String, parameter "workspace_name" of
+           String, parameter "workspace_id" of Long, parameter "object_name"
+           of String, parameter "object_id" of Long, parameter
+           "is_interleaved" of Long, parameter "insert_size" of Double,
+           parameter "std_dev" of Double, parameter "orientation_outward" of
+           Long, parameter "sequencing_tech" of String, parameter
+           "single_genome" of Long
+        :returns: instance of type "object_id" (Name of an object in the
+           KBase workspace)
+        """
+        return self._client.call_method(
+            'genome_transform.sra_reads_to_library',
+            [reads_to_library_params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('genome_transform.status',
                                         [], self._service_ver, context)

@@ -2,10 +2,10 @@ package genome_transform::genome_transformImpl;
 use strict;
 use Bio::KBase::Exceptions;
 # Use Semantic Versioning (2.0.0-rc.1)
-# http://semver.org 
+# http://semver.org
 our $VERSION = "0.0.1";
-our $GIT_URL = "https://github.com/sean-mccorkle/genome_transform.git";
-our $GIT_COMMIT_HASH = "6adaa4a68dd80943424ea73cf5153c83fd62501a";
+our $GIT_URL = "https://github.com/janakagithub/genome_transform";
+our $GIT_COMMIT_HASH = "a752d4c085e9935ae93aadaac12069a0a821669a";
 
 =head1 NAME
 
@@ -13,7 +13,8 @@ genome_transform
 
 =head1 DESCRIPTION
 
-no luck finding this in kbase or kbaseapps repos
+A KBase module: genome_transform
+This sample module contains one small method - filter_contigs.
 
 =cut
 
@@ -1367,191 +1368,7 @@ sub rna_sample_set
 
 
 
-=head2 reads_to_library
-
-  $return = $obj->reads_to_library($reads_to_library_params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$reads_to_library_params is a genome_transform.reads_to_library_params
-$return is a genome_transform.object_id
-reads_to_library_params is a reference to a hash where the following keys are defined:
-	file_path_list has a value which is a reference to a list where each element is a string
-	workspace_name has a value which is a string
-	workspace_id has a value which is an int
-	object_name has a value which is a string
-	object_id has a value which is an int
-	is_interleaved has a value which is an int
-	insert_size has a value which is a float
-	std_dev has a value which is a float
-	orientation_outward has a value which is an int
-	sequencing_tech has a value which is a string
-	single_genome has a value which is an int
-object_id is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-$reads_to_library_params is a genome_transform.reads_to_library_params
-$return is a genome_transform.object_id
-reads_to_library_params is a reference to a hash where the following keys are defined:
-	file_path_list has a value which is a reference to a list where each element is a string
-	workspace_name has a value which is a string
-	workspace_id has a value which is an int
-	object_name has a value which is a string
-	object_id has a value which is an int
-	is_interleaved has a value which is an int
-	insert_size has a value which is a float
-	std_dev has a value which is a float
-	orientation_outward has a value which is an int
-	sequencing_tech has a value which is a string
-	single_genome has a value which is an int
-object_id is a string
-
-
-=end text
-
-
-
-=item Description
-
-
-
-=back
-
-=cut
-
-sub reads_to_library
-{
-    my $self = shift;
-    my($reads_to_library_params) = @_;
-
-    my @_bad_arguments;
-    (ref($reads_to_library_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"reads_to_library_params\" (value was \"$reads_to_library_params\")");
-    if (@_bad_arguments) {
-	my $msg = "Invalid arguments passed to reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'reads_to_library');
-    }
-
-    my $ctx = $genome_transform::genome_transformServer::CallContext;
-    my($return);
-    #BEGIN reads_to_library
-    #END reads_to_library
-    my @_bad_returns;
-    (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
-    if (@_bad_returns) {
-	my $msg = "Invalid returns passed to reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_returns);
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'reads_to_library');
-    }
-    return($return);
-}
-
-
-
-
-=head2 sra_reads_to_library
-
-  $return = $obj->sra_reads_to_library($reads_to_library_params)
-
-=over 4
-
-=item Parameter and return types
-
-=begin html
-
-<pre>
-$reads_to_library_params is a genome_transform.reads_to_library_params
-$return is a genome_transform.object_id
-reads_to_library_params is a reference to a hash where the following keys are defined:
-	file_path_list has a value which is a reference to a list where each element is a string
-	workspace_name has a value which is a string
-	workspace_id has a value which is an int
-	object_name has a value which is a string
-	object_id has a value which is an int
-	is_interleaved has a value which is an int
-	insert_size has a value which is a float
-	std_dev has a value which is a float
-	orientation_outward has a value which is an int
-	sequencing_tech has a value which is a string
-	single_genome has a value which is an int
-object_id is a string
-
-</pre>
-
-=end html
-
-=begin text
-
-$reads_to_library_params is a genome_transform.reads_to_library_params
-$return is a genome_transform.object_id
-reads_to_library_params is a reference to a hash where the following keys are defined:
-	file_path_list has a value which is a reference to a list where each element is a string
-	workspace_name has a value which is a string
-	workspace_id has a value which is an int
-	object_name has a value which is a string
-	object_id has a value which is an int
-	is_interleaved has a value which is an int
-	insert_size has a value which is a float
-	std_dev has a value which is a float
-	orientation_outward has a value which is an int
-	sequencing_tech has a value which is a string
-	single_genome has a value which is an int
-object_id is a string
-
-
-=end text
-
-
-
-=item Description
-
-
-
-=back
-
-=cut
-
-sub sra_reads_to_library
-{
-    my $self = shift;
-    my($reads_to_library_params) = @_;
-
-    my @_bad_arguments;
-    (ref($reads_to_library_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument \"reads_to_library_params\" (value was \"$reads_to_library_params\")");
-    if (@_bad_arguments) {
-	my $msg = "Invalid arguments passed to sra_reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_arguments);
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'sra_reads_to_library');
-    }
-
-    my $ctx = $genome_transform::genome_transformServer::CallContext;
-    my($return);
-    #BEGIN sra_reads_to_library
-    #END sra_reads_to_library
-    my @_bad_returns;
-    (!ref($return)) or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
-    if (@_bad_returns) {
-	my $msg = "Invalid returns passed to sra_reads_to_library:\n" . join("", map { "\t$_\n" } @_bad_returns);
-	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-							       method_name => 'sra_reads_to_library');
-    }
-    return($return);
-}
-
-
-
-
-=head2 status 
+=head2 status
 
   $return = $obj->status()
 
@@ -2356,61 +2173,6 @@ reads_id has a value which is a genome_transform.object_id
 outward has a value which is a string
 insert_size has a value which is a float
 std_dev has a value which is a float
-
-
-=end text
-
-=back
-
-
-
-=head2 reads_to_library_params
-
-=over 4
-
-
-
-=item Description
-
-these next methods use the new ReadsUtils module methods for uploading
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-file_path_list has a value which is a reference to a list where each element is a string
-workspace_name has a value which is a string
-workspace_id has a value which is an int
-object_name has a value which is a string
-object_id has a value which is an int
-is_interleaved has a value which is an int
-insert_size has a value which is a float
-std_dev has a value which is a float
-orientation_outward has a value which is an int
-sequencing_tech has a value which is a string
-single_genome has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-file_path_list has a value which is a reference to a list where each element is a string
-workspace_name has a value which is a string
-workspace_id has a value which is an int
-object_name has a value which is a string
-object_id has a value which is an int
-is_interleaved has a value which is an int
-insert_size has a value which is a float
-std_dev has a value which is a float
-orientation_outward has a value which is an int
-sequencing_tech has a value which is a string
-single_genome has a value which is an int
 
 
 =end text
