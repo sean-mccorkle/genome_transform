@@ -1,0 +1,88 @@
+#
+# define display information
+#
+name: Upload RNA Sample Set
+tooltip: |
+    Upload RNA Sample Set
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar methods that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            []
+        next:
+            []
+    methods:
+        related:
+            []
+        next:
+            [annotate_contigset]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    file_path_list:
+        ui-name : Paths to reads files
+        short-hint : Paths to reads files
+    reads_id:
+        ui-name : Name of the reads object
+        short-hint : Name of the reads object
+    outward:
+        ui-name : flag is set to 1 if reads in the pair point outward
+        short-hint : flag is set to 1 if reads in the pair point outward
+    insert_size:
+        ui-name : Insert size
+        short-hint : Insert size
+    std_dev:
+        ui-name : Standard deviation
+        short-hint : Standard deviation
+    reads_type:
+        ui-name :  Reads type
+        short-hint : Reads type
+    domain:
+        ui-name :  Domain name
+        short-hint : Domain name
+    platform:
+        ui-name :  platform
+        short-hint : platform
+    condition:
+        ui-name : Name of the condition
+        short-hint : Name of the condition
+    source:
+        ui-name :  source
+        short-hint : source
+    Library_type:
+        ui-name :  Library type
+        short-hint : Library type
+    publication_Id:
+        ui-name :  publication id
+        short-hint : publication id
+    external_source_date:
+        ui-name :  external_source_date
+        short-hint : external_source_date
+    sampleset_desc:
+        ui-name :  sampleset_desc
+        short-hint : sampleset_desc
+    sampleset_id:
+        ui-name :  sampleset_id
+        short-hint : sampleset_id
+    sra:
+        ui-name :  is the reads set sra?
+        short-hint : if do enter 1 if not leave 0
+
+
+
+
+
+
+
+
+
+description : |
+    <p>This is a methods uploads a read set fasta or fastq into shock.</p>
