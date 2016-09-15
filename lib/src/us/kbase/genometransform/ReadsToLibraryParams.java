@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import us.kbase.kbasecommon.SourceInfo;
+import us.kbase.kbasecommon.StrainInfo;
 
 
 /**
@@ -32,7 +34,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "std_dev",
     "orientation_outward",
     "sequencing_tech",
-    "single_genome"
+    "single_genome",
+    "strain",
+    "source"
 })
 public class ReadsToLibraryParams {
 
@@ -58,6 +62,39 @@ public class ReadsToLibraryParams {
     private java.lang.String sequencingTech;
     @JsonProperty("single_genome")
     private Long singleGenome;
+    /**
+     * <p>Original spec-file type: StrainInfo</p>
+     * <pre>
+     * Information about a strain.
+     * genetic_code - the genetic code of the strain.
+     *     See http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?mode=c
+     * genus - the genus of the strain
+     * species - the species of the strain
+     * strain - the identifier for the strain
+     * source - information about the source of the strain
+     * organelle - the organelle of interest for the related data (e.g.
+     *     mitochondria)
+     * ncbi_taxid - the NCBI taxonomy ID of the strain
+     * location - the location from which the strain was collected
+     * @optional genetic_code source ncbi_taxid organelle location
+     * </pre>
+     * 
+     */
+    @JsonProperty("strain")
+    private StrainInfo strain;
+    /**
+     * <p>Original spec-file type: SourceInfo</p>
+     * <pre>
+     * Information about the source of a piece of data.
+     * source - the name of the source (e.g. NCBI, JGI, Swiss-Prot)
+     * source_id - the ID of the data at the source
+     * project_id - the ID of a project encompassing the data at the source
+     * @optional source source_id project_id
+     * </pre>
+     * 
+     */
+    @JsonProperty("source")
+    private SourceInfo source;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("file_path_list")
@@ -225,6 +262,94 @@ public class ReadsToLibraryParams {
         return this;
     }
 
+    /**
+     * <p>Original spec-file type: StrainInfo</p>
+     * <pre>
+     * Information about a strain.
+     * genetic_code - the genetic code of the strain.
+     *     See http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?mode=c
+     * genus - the genus of the strain
+     * species - the species of the strain
+     * strain - the identifier for the strain
+     * source - information about the source of the strain
+     * organelle - the organelle of interest for the related data (e.g.
+     *     mitochondria)
+     * ncbi_taxid - the NCBI taxonomy ID of the strain
+     * location - the location from which the strain was collected
+     * @optional genetic_code source ncbi_taxid organelle location
+     * </pre>
+     * 
+     */
+    @JsonProperty("strain")
+    public StrainInfo getStrain() {
+        return strain;
+    }
+
+    /**
+     * <p>Original spec-file type: StrainInfo</p>
+     * <pre>
+     * Information about a strain.
+     * genetic_code - the genetic code of the strain.
+     *     See http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi?mode=c
+     * genus - the genus of the strain
+     * species - the species of the strain
+     * strain - the identifier for the strain
+     * source - information about the source of the strain
+     * organelle - the organelle of interest for the related data (e.g.
+     *     mitochondria)
+     * ncbi_taxid - the NCBI taxonomy ID of the strain
+     * location - the location from which the strain was collected
+     * @optional genetic_code source ncbi_taxid organelle location
+     * </pre>
+     * 
+     */
+    @JsonProperty("strain")
+    public void setStrain(StrainInfo strain) {
+        this.strain = strain;
+    }
+
+    public ReadsToLibraryParams withStrain(StrainInfo strain) {
+        this.strain = strain;
+        return this;
+    }
+
+    /**
+     * <p>Original spec-file type: SourceInfo</p>
+     * <pre>
+     * Information about the source of a piece of data.
+     * source - the name of the source (e.g. NCBI, JGI, Swiss-Prot)
+     * source_id - the ID of the data at the source
+     * project_id - the ID of a project encompassing the data at the source
+     * @optional source source_id project_id
+     * </pre>
+     * 
+     */
+    @JsonProperty("source")
+    public SourceInfo getSource() {
+        return source;
+    }
+
+    /**
+     * <p>Original spec-file type: SourceInfo</p>
+     * <pre>
+     * Information about the source of a piece of data.
+     * source - the name of the source (e.g. NCBI, JGI, Swiss-Prot)
+     * source_id - the ID of the data at the source
+     * project_id - the ID of a project encompassing the data at the source
+     * @optional source source_id project_id
+     * </pre>
+     * 
+     */
+    @JsonProperty("source")
+    public void setSource(SourceInfo source) {
+        this.source = source;
+    }
+
+    public ReadsToLibraryParams withSource(SourceInfo source) {
+        this.source = source;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -237,7 +362,7 @@ public class ReadsToLibraryParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((("ReadsToLibraryParams"+" [filePathList=")+ filePathList)+", workspaceName=")+ workspaceName)+", workspaceId=")+ workspaceId)+", objectName=")+ objectName)+", objectId=")+ objectId)+", isInterleaved=")+ isInterleaved)+", insertSize=")+ insertSize)+", stdDev=")+ stdDev)+", orientationOutward=")+ orientationOutward)+", sequencingTech=")+ sequencingTech)+", singleGenome=")+ singleGenome)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((("ReadsToLibraryParams"+" [filePathList=")+ filePathList)+", workspaceName=")+ workspaceName)+", workspaceId=")+ workspaceId)+", objectName=")+ objectName)+", objectId=")+ objectId)+", isInterleaved=")+ isInterleaved)+", insertSize=")+ insertSize)+", stdDev=")+ stdDev)+", orientationOutward=")+ orientationOutward)+", sequencingTech=")+ sequencingTech)+", singleGenome=")+ singleGenome)+", strain=")+ strain)+", source=")+ source)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

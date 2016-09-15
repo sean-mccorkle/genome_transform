@@ -33,8 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "source",
     "Library_type",
     "publication_Id",
-    "external_source_date",
-    "sra"
+    "external_source_date"
 })
 public class RnaSeqMeta {
 
@@ -54,8 +53,6 @@ public class RnaSeqMeta {
     private String publicationId;
     @JsonProperty("external_source_date")
     private String externalSourceDate;
-    @JsonProperty("sra")
-    private String sra;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("domain")
@@ -178,21 +175,6 @@ public class RnaSeqMeta {
         return this;
     }
 
-    @JsonProperty("sra")
-    public String getSra() {
-        return sra;
-    }
-
-    @JsonProperty("sra")
-    public void setSra(String sra) {
-        this.sra = sra;
-    }
-
-    public RnaSeqMeta withSra(String sra) {
-        this.sra = sra;
-        return this;
-    }
-
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -205,7 +187,7 @@ public class RnaSeqMeta {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((("RnaSeqMeta"+" [domain=")+ domain)+", platform=")+ platform)+", sampleId=")+ sampleId)+", condition=")+ condition)+", source=")+ source)+", LibraryType=")+ LibraryType)+", publicationId=")+ publicationId)+", externalSourceDate=")+ externalSourceDate)+", sra=")+ sra)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((("RnaSeqMeta"+" [domain=")+ domain)+", platform=")+ platform)+", sampleId=")+ sampleId)+", condition=")+ condition)+", source=")+ source)+", LibraryType=")+ LibraryType)+", publicationId=")+ publicationId)+", externalSourceDate=")+ externalSourceDate)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

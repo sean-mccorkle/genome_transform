@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "domain",
     "sampleset_id",
     "sampleset_desc",
-    "rnaSeqMeta"
+    "rnaSeqSample"
 })
 public class RnaSampleSetParams {
 
@@ -36,8 +36,8 @@ public class RnaSampleSetParams {
     private String samplesetId;
     @JsonProperty("sampleset_desc")
     private String samplesetDesc;
-    @JsonProperty("rnaSeqMeta")
-    private List<ReadsToAssemblyParams> rnaSeqMeta;
+    @JsonProperty("rnaSeqSample")
+    private List<RnaseqSequenceParams> rnaSeqSample;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("workspace")
@@ -100,18 +100,18 @@ public class RnaSampleSetParams {
         return this;
     }
 
-    @JsonProperty("rnaSeqMeta")
-    public List<ReadsToAssemblyParams> getRnaSeqMeta() {
-        return rnaSeqMeta;
+    @JsonProperty("rnaSeqSample")
+    public List<RnaseqSequenceParams> getRnaSeqSample() {
+        return rnaSeqSample;
     }
 
-    @JsonProperty("rnaSeqMeta")
-    public void setRnaSeqMeta(List<ReadsToAssemblyParams> rnaSeqMeta) {
-        this.rnaSeqMeta = rnaSeqMeta;
+    @JsonProperty("rnaSeqSample")
+    public void setRnaSeqSample(List<RnaseqSequenceParams> rnaSeqSample) {
+        this.rnaSeqSample = rnaSeqSample;
     }
 
-    public RnaSampleSetParams withRnaSeqMeta(List<ReadsToAssemblyParams> rnaSeqMeta) {
-        this.rnaSeqMeta = rnaSeqMeta;
+    public RnaSampleSetParams withRnaSeqSample(List<RnaseqSequenceParams> rnaSeqSample) {
+        this.rnaSeqSample = rnaSeqSample;
         return this;
     }
 
@@ -127,7 +127,7 @@ public class RnaSampleSetParams {
 
     @Override
     public String toString() {
-        return ((((((((((((("RnaSampleSetParams"+" [workspace=")+ workspace)+", domain=")+ domain)+", samplesetId=")+ samplesetId)+", samplesetDesc=")+ samplesetDesc)+", rnaSeqMeta=")+ rnaSeqMeta)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("RnaSampleSetParams"+" [workspace=")+ workspace)+", domain=")+ domain)+", samplesetId=")+ samplesetId)+", samplesetDesc=")+ samplesetDesc)+", rnaSeqSample=")+ rnaSeqSample)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

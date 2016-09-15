@@ -26,7 +26,7 @@ genome_transform::genome_transformClient
 =head1 DESCRIPTION
 
 
-no luck finding this in kbase or kbaseapps repos
+
 
 
 =cut
@@ -450,7 +450,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -484,7 +483,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -549,7 +547,7 @@ object_id is a string
 
 =head2 sra_reads_to_assembly
 
-  $return = $obj->sra_reads_to_assembly($sra_reads_to_assembly_params)
+  $return = $obj->sra_reads_to_assembly($reads_to_assembly_params)
 
 =over 4
 
@@ -558,13 +556,14 @@ object_id is a string
 =begin html
 
 <pre>
-$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
 $return is a genome_transform.object_id
-sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -572,6 +571,15 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -581,13 +589,14 @@ object_id is a string
 
 =begin text
 
-$sra_reads_to_assembly_params is a genome_transform.sra_reads_to_assembly_params
+$reads_to_assembly_params is a genome_transform.reads_to_assembly_params
 $return is a genome_transform.object_id
-sra_reads_to_assembly_params is a reference to a hash where the following keys are defined:
+reads_to_assembly_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
 	file_path_list has a value which is a reference to a list where each element is a string
+	rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
 	workspace has a value which is a genome_transform.workspace_id
 	reads_id has a value which is a genome_transform.object_id
 	outward has a value which is a string
@@ -595,6 +604,15 @@ sra_reads_to_assembly_params is a reference to a hash where the following keys a
 	std_dev has a value which is a float
 shock_ref is a string
 handle_ref is a string
+rnaSeqMeta is a reference to a hash where the following keys are defined:
+	domain has a value which is a string
+	platform has a value which is a string
+	sample_id has a value which is a string
+	condition has a value which is a string
+	source has a value which is a string
+	Library_type has a value which is a string
+	publication_Id has a value which is a string
+	external_source_date has a value which is a string
 workspace_id is a string
 object_id is a string
 
@@ -621,10 +639,10 @@ object_id is a string
 							       "Invalid argument count for function sra_reads_to_assembly (received $n, expecting 1)");
     }
     {
-	my($sra_reads_to_assembly_params) = @args;
+	my($reads_to_assembly_params) = @args;
 
 	my @_bad_arguments;
-        (ref($sra_reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"sra_reads_to_assembly_params\" (value was \"$sra_reads_to_assembly_params\")");
+        (ref($reads_to_assembly_params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"reads_to_assembly_params\" (value was \"$reads_to_assembly_params\")");
         if (@_bad_arguments) {
 	    my $msg = "Invalid arguments passed to sra_reads_to_assembly:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
@@ -675,9 +693,9 @@ rna_sample_set_params is a reference to a hash where the following keys are defi
 	domain has a value which is a string
 	sampleset_id has a value which is a string
 	sampleset_desc has a value which is a string
-	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+	rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 workspace_id is a string
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+rnaseq_sequence_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -688,6 +706,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
+	sra has a value which is an int
 shock_ref is a string
 handle_ref is a string
 rnaSeqMeta is a reference to a hash where the following keys are defined:
@@ -699,7 +718,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 object_id is a string
 
 </pre>
@@ -715,9 +733,9 @@ rna_sample_set_params is a reference to a hash where the following keys are defi
 	domain has a value which is a string
 	sampleset_id has a value which is a string
 	sampleset_desc has a value which is a string
-	rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+	rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 workspace_id is a string
-reads_to_assembly_params is a reference to a hash where the following keys are defined:
+rnaseq_sequence_params is a reference to a hash where the following keys are defined:
 	reads_shock_ref has a value which is a genome_transform.shock_ref
 	reads_handle_ref has a value which is a genome_transform.handle_ref
 	reads_type has a value which is a string
@@ -728,6 +746,7 @@ reads_to_assembly_params is a reference to a hash where the following keys are d
 	outward has a value which is a string
 	insert_size has a value which is a float
 	std_dev has a value which is a float
+	sra has a value which is an int
 shock_ref is a string
 handle_ref is a string
 rnaSeqMeta is a reference to a hash where the following keys are defined:
@@ -739,7 +758,6 @@ rnaSeqMeta is a reference to a hash where the following keys are defined:
 	Library_type has a value which is a string
 	publication_Id has a value which is a string
 	external_source_date has a value which is a string
-	sra has a value which is a string
 object_id is a string
 
 
@@ -826,6 +844,29 @@ reads_to_library_params is a reference to a hash where the following keys are de
 	orientation_outward has a value which is an int
 	sequencing_tech has a value which is a string
 	single_genome has a value which is an int
+	strain has a value which is a KBaseCommon.StrainInfo
+	source has a value which is a KBaseCommon.SourceInfo
+StrainInfo is a reference to a hash where the following keys are defined:
+	genetic_code has a value which is an int
+	genus has a value which is a string
+	species has a value which is a string
+	strain has a value which is a string
+	organelle has a value which is a string
+	source has a value which is a KBaseCommon.SourceInfo
+	ncbi_taxid has a value which is an int
+	location has a value which is a KBaseCommon.Location
+SourceInfo is a reference to a hash where the following keys are defined:
+	source has a value which is a string
+	source_id has a value which is a KBaseCommon.source_id
+	project_id has a value which is a KBaseCommon.project_id
+source_id is a string
+project_id is a string
+Location is a reference to a hash where the following keys are defined:
+	lat has a value which is a float
+	lon has a value which is a float
+	elevation has a value which is a float
+	date has a value which is a string
+	description has a value which is a string
 object_id is a string
 
 </pre>
@@ -848,6 +889,29 @@ reads_to_library_params is a reference to a hash where the following keys are de
 	orientation_outward has a value which is an int
 	sequencing_tech has a value which is a string
 	single_genome has a value which is an int
+	strain has a value which is a KBaseCommon.StrainInfo
+	source has a value which is a KBaseCommon.SourceInfo
+StrainInfo is a reference to a hash where the following keys are defined:
+	genetic_code has a value which is an int
+	genus has a value which is a string
+	species has a value which is a string
+	strain has a value which is a string
+	organelle has a value which is a string
+	source has a value which is a KBaseCommon.SourceInfo
+	ncbi_taxid has a value which is an int
+	location has a value which is a KBaseCommon.Location
+SourceInfo is a reference to a hash where the following keys are defined:
+	source has a value which is a string
+	source_id has a value which is a KBaseCommon.source_id
+	project_id has a value which is a KBaseCommon.project_id
+source_id is a string
+project_id is a string
+Location is a reference to a hash where the following keys are defined:
+	lat has a value which is a float
+	lon has a value which is a float
+	elevation has a value which is a float
+	date has a value which is a string
+	description has a value which is a string
 object_id is a string
 
 
@@ -934,6 +998,29 @@ reads_to_library_params is a reference to a hash where the following keys are de
 	orientation_outward has a value which is an int
 	sequencing_tech has a value which is a string
 	single_genome has a value which is an int
+	strain has a value which is a KBaseCommon.StrainInfo
+	source has a value which is a KBaseCommon.SourceInfo
+StrainInfo is a reference to a hash where the following keys are defined:
+	genetic_code has a value which is an int
+	genus has a value which is a string
+	species has a value which is a string
+	strain has a value which is a string
+	organelle has a value which is a string
+	source has a value which is a KBaseCommon.SourceInfo
+	ncbi_taxid has a value which is an int
+	location has a value which is a KBaseCommon.Location
+SourceInfo is a reference to a hash where the following keys are defined:
+	source has a value which is a string
+	source_id has a value which is a KBaseCommon.source_id
+	project_id has a value which is a KBaseCommon.project_id
+source_id is a string
+project_id is a string
+Location is a reference to a hash where the following keys are defined:
+	lat has a value which is a float
+	lon has a value which is a float
+	elevation has a value which is a float
+	date has a value which is a string
+	description has a value which is a string
 object_id is a string
 
 </pre>
@@ -956,6 +1043,29 @@ reads_to_library_params is a reference to a hash where the following keys are de
 	orientation_outward has a value which is an int
 	sequencing_tech has a value which is a string
 	single_genome has a value which is an int
+	strain has a value which is a KBaseCommon.StrainInfo
+	source has a value which is a KBaseCommon.SourceInfo
+StrainInfo is a reference to a hash where the following keys are defined:
+	genetic_code has a value which is an int
+	genus has a value which is a string
+	species has a value which is a string
+	strain has a value which is a string
+	organelle has a value which is a string
+	source has a value which is a KBaseCommon.SourceInfo
+	ncbi_taxid has a value which is an int
+	location has a value which is a KBaseCommon.Location
+SourceInfo is a reference to a hash where the following keys are defined:
+	source has a value which is a string
+	source_id has a value which is a KBaseCommon.source_id
+	project_id has a value which is a KBaseCommon.project_id
+source_id is a string
+project_id is a string
+Location is a reference to a hash where the following keys are defined:
+	lat has a value which is a float
+	lon has a value which is a float
+	elevation has a value which is a float
+	date has a value which is a string
+	description has a value which is a string
 object_id is a string
 
 
@@ -1523,6 +1633,271 @@ sequence type
 =begin html
 
 <pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
+=head2 domain
+
+=over 4
+
+
+
+=item Description
+
+Rna Seq metadata
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 platform
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sample_id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 condition
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 source
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 Library_type
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 publication_Id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 external_source_date
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sampleset_id
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 sampleset_desc
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
 a string
 </pre>
 
@@ -1716,7 +2091,6 @@ source has a value which is a string
 Library_type has a value which is a string
 publication_Id has a value which is a string
 external_source_date has a value which is a string
-sra has a value which is a string
 
 </pre>
 
@@ -1733,7 +2107,6 @@ source has a value which is a string
 Library_type has a value which is a string
 publication_Id has a value which is a string
 external_source_date has a value which is a string
-sra has a value which is a string
 
 
 =end text
@@ -1790,6 +2163,56 @@ std_dev has a value which is a float
 
 
 
+=head2 rnaseq_sequence_params
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+sra has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+reads_shock_ref has a value which is a genome_transform.shock_ref
+reads_handle_ref has a value which is a genome_transform.handle_ref
+reads_type has a value which is a string
+file_path_list has a value which is a reference to a list where each element is a string
+rnaSeqMetaData has a value which is a reference to a hash where the key is a string and the value is a genome_transform.rnaSeqMeta
+workspace has a value which is a genome_transform.workspace_id
+reads_id has a value which is a genome_transform.object_id
+outward has a value which is a string
+insert_size has a value which is a float
+std_dev has a value which is a float
+sra has a value which is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 rna_sample_set_params
 
 =over 4
@@ -1806,7 +2229,7 @@ workspace has a value which is a genome_transform.workspace_id
 domain has a value which is a string
 sampleset_id has a value which is a string
 sampleset_desc has a value which is a string
-rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
+rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 
 </pre>
 
@@ -1819,53 +2242,7 @@ workspace has a value which is a genome_transform.workspace_id
 domain has a value which is a string
 sampleset_id has a value which is a string
 sampleset_desc has a value which is a string
-rnaSeqMeta has a value which is a reference to a list where each element is a genome_transform.reads_to_assembly_params
-
-
-=end text
-
-=back
-
-
-
-=head2 sra_reads_to_assembly_params
-
-=over 4
-
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-reads_shock_ref has a value which is a genome_transform.shock_ref
-reads_handle_ref has a value which is a genome_transform.handle_ref
-reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
-workspace has a value which is a genome_transform.workspace_id
-reads_id has a value which is a genome_transform.object_id
-outward has a value which is a string
-insert_size has a value which is a float
-std_dev has a value which is a float
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-reads_shock_ref has a value which is a genome_transform.shock_ref
-reads_handle_ref has a value which is a genome_transform.handle_ref
-reads_type has a value which is a string
-file_path_list has a value which is a reference to a list where each element is a string
-workspace has a value which is a genome_transform.workspace_id
-reads_id has a value which is a genome_transform.object_id
-outward has a value which is a string
-insert_size has a value which is a float
-std_dev has a value which is a float
+rnaSeqSample has a value which is a reference to a list where each element is a genome_transform.rnaseq_sequence_params
 
 
 =end text
@@ -1902,6 +2279,8 @@ std_dev has a value which is a float
 orientation_outward has a value which is an int
 sequencing_tech has a value which is a string
 single_genome has a value which is an int
+strain has a value which is a KBaseCommon.StrainInfo
+source has a value which is a KBaseCommon.SourceInfo
 
 </pre>
 
@@ -1921,6 +2300,8 @@ std_dev has a value which is a float
 orientation_outward has a value which is an int
 sequencing_tech has a value which is a string
 single_genome has a value which is an int
+strain has a value which is a KBaseCommon.StrainInfo
+source has a value which is a KBaseCommon.SourceInfo
 
 
 =end text
