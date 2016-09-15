@@ -358,10 +358,8 @@ sub genbank_to_genome
     my $contig_id = $genbank_to_genome_params->{contigset_id};
 
         $genome_id = $genome_id."";
-    print "check";
-    my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
 
-    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
+    print "file-path  $file_path\n\n";
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
@@ -382,7 +380,7 @@ sub genbank_to_genome
 
 ################################
 
-system ("ls /data/bulktest");
+
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
