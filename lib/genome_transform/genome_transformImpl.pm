@@ -265,6 +265,21 @@ sub curl_post_file {
     return $json->{data}->{id};
 }
 
+# this is invoked by reads_to_library() and sra_reads_to_library() to get the appropriate
+# URL for fastq uploads to shock.  On the DTN AWE servers, this should be the direct access rather than
+# the nginx proxy, because that won't handle extremely large files.
+
+sub  determine_relevant_shock_url
+   {
+    my $shock_url = 'https://ci.kbase.us/services/shock-api';  # default to regular CI shock proxy
+
+    # if running on DTN AWE, use direct connection.  This is required for large files
+    # since the nginx proxy complains if the file is too big.
+
+     $shock_url = 'http://ci05.kbase.lbl.gov:7044' if ( $ENV{AWE_CLIENTGROUP} eq "kb_upload");
+     print "relevant shock URL is [$shock_url]\n";
+     return( $shock_url );
+   }
 
 #END_HEADER
 
@@ -1549,7 +1564,7 @@ sub reads_to_library
     my($return);
     #BEGIN reads_to_library
 
-    print "In method reads_to_library(), params\n";
+    print "In method reads_to_library(), input params:\n";
 
     print Dumper( $reads_to_library_params );
 
@@ -1575,9 +1590,10 @@ sub reads_to_library
 
     my @file_shock_ids = ();
     $| = 1;
+    my $shock_url = determine_relevant_shock_url();
     foreach my $file ( @{$file_path_list} )
         {
-         print "uploading [$file] to shock ...";
+         print "uploading [$file] to shock ...\n";
          #my $res = $DataFileUtil_instance->file_to_shock( { 'file_path'   => $file,
          #                                                   'attributes'  => '',
          #                                                   'make_handle' => 0,
@@ -1585,10 +1601,12 @@ sub reads_to_library
          #                                               );
          #print "res is\n", Dumper( $res ), "\n";
 
-         # can't get the above DFU code working, so for now, fallback to curl
+         # can't get the above DFU code working, so for now, fallback to curl:
+
+
          my $shock_id = curl_post_file( $file, 
                                         { 'token' => $ctx->token,
-                                          'url'   => 'https://ci.kbase.us/services/shock-api'
+                                          'url'   => $shock_url,
                                         }
                                       );
          print "shock_id is [$shock_id]\n";
@@ -1596,15 +1614,15 @@ sub reads_to_library
         }
 
     my $reads_type = $reads_to_library_params->{reads_type};
-
+#
     my $ReadsUtils_instance = new ReadsUtils::ReadsUtilsClient( $self->{'callbackURL'}, 
                                                             ( 'service_version' => 'dev',
                                                               'async_version' => 'dev',
                                                             )
                                                           );
-
-    print "got ReadsUtilsinstance\n", Dumper( $ReadsUtils_instance );
-
+#
+    #print "got ReadsUtilsinstance\n", Dumper( $ReadsUtils_instance );
+#
     my $fastq_upload_params = {
                               'fwd_id' => $file_shock_ids[0],
                               'wsname' => $reads_to_library_params->{'workspace_name'},   # only one of these should
@@ -1625,9 +1643,15 @@ sub reads_to_library
         # handle interleaved here...
         $fastq_upload_params->{'rev_id'} = $file_shock_ids[1];
        }
-    my  $upload_ret = $ReadsUtils_instance->upload_reads( $fastq_upload_params );
-    print "back from ReadsUtils_instance->upload_reads, method_retVal is\n", Dumper( $upload_ret ), "\n";
-
+    my $upload_ret;
+    eval {  $upload_ret = $ReadsUtils_instance->upload_reads( $fastq_upload_params );  } ;
+    if ( $@ )
+       {  print STDERR "ReadsUtils upload_reads failed: $@\n";  }
+    else 
+       {
+        print "back from ReadsUtils_instance->upload_reads, method_retVal is\n", Dumper( $upload_ret ), "\n";
+        $return = $upload_ret->{'obj_ref'};
+       }
     print "Leaving method reads_to_library\n";
 
     #END reads_to_library

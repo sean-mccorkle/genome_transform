@@ -25,28 +25,66 @@ my $target_workspace_name = 'mccorkle:1469823748917';
 print "begin reads_utils_tests.pl\n"; 
 
 my @reads_params = (
+   #{  # this should fail - these are not fastq files, ReadUtils validation should detect
+   #   # that and throw an error.  Program should continue to next test without crashing
+   # file_path_list => [ '/kb/module/data/bad_1.fastq', '/kb/module/data/bad_2.fastq' ],
+   # reads_type => 'PairedEndLibrary',
+#
+   # workspace_name  => $target_workspace_name,
+   # object_name => 'ru_fq_0_pe_library',
+#
+   # sequencing_tech => 'Illumina',
+   #},
    {
-    file_path_list => [ '/kb/module/data/short_1.fastq', '/kb/module/data/short_2.fastq' ],
+    file_path_list => [ '/kb/module/data/bad_1.fastq', '/kb/module/data/bad_2.fastq' ],
     reads_type => 'PairedEndLibrary',
 
     workspace_name  => $target_workspace_name,
-    object_name => 'ru_fq_1_pe_library',
+    object_name => 'ru_fq_0_pe_library',
 
     sequencing_tech => 'Illumina',
+    is_interleaved => 1,
    },
+   #{
+   # file_path_list => [ '/kb/module/data/short_1.fastq', '/kb/module/data/short_2.fastq' ],
+   # reads_type => 'PairedEndLibrary',
+#
+   # workspace_name  => $target_workspace_name,
+   # object_name => 'ru_fq_1_pe_library',
+#
+   # sequencing_tech => 'Illumina',
+   # single_geneome => 1,
+   # orientation_out => 0,
+   #},
+   #{
+   # file_path_list => [ '/kb/module/data/short_1.fastq.gz', '/kb/module/data/short_2.fastq.gz' ],
+   # reads_type => 'PairedEndLibrary',
+#
+   # workspace_name  => $target_workspace_name,
+   # object_name => 'ru_fq_2_pe_library',
+#
+   # sequencing_tech => 'Illumina',
+   # orientation_out => 1,
+   #},
 
 );
 
-print "begin reads_to_libary test\n";
+sub pline { print "-"x80, "\n"; }
 
+print "begin reads_to_libary tests\n";
+my $i = 1;
 foreach my $input_parms ( @reads_params )
    {
+    pline();
+    print "reads_to_library test # $i\n";
     #eval {
           my $ret = $impl->reads_to_library( $input_parms );
     #    };
+    print "reads_to_library test # $i ret is ", Dumper( $ret ), "\n";
+    $i++;
    }
 
-print "end reads_to_library test\n";
+print "end reads_to_library tests\n";
 
 
 my @comp_fastqs = (
