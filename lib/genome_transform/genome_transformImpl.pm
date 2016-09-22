@@ -246,6 +246,38 @@ sub  convert_sra
        { die "$0: convert_sra() did not get correct type:  '$type' should be either 'SingleEndLibrary' or 'PairedEndLibrary'.\n";}
    }
 
+# $shock_url = determine_relevant_shock_url() is invoked by various methods below to determine 
+# URL for fastq uploads to shock based on the runtime environment.   We want to use the direct
+# http: url to the shock server because the nginx proxy won't handle extremely large files,
+# but the direct URL won't work for docker container testing.  
+#
+
+sub  determine_relevant_shock_url
+   {
+    my $is_CI = 1;   # modify this to determine the environment
+    my $shock_url;
+
+    if ( $is_CI )
+       {  $shock_url = 'https://ci.kbase.us/services/shock-api';  } # default to regular CI shock proxy
+    else        
+       {  $shock_url = 'https://kbase.us/services/shock-api';  } # default to regular production shock proxy
+
+    # if running on DTN AWE, use the direct connection.  This is required for large files
+    # since the nginx proxy complains if the file is too big.
+
+    if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload") )
+       {
+        if ( $is_CI )
+           {  $shock_url = 'http://ci05.kbase.lbl.gov:7044';  }
+        else
+           {  $shock_url = 'http://shock.kbase.us:7044';  }   # get real name for this 
+       }
+    print "relevant shock URL is [$shock_url]\n";
+
+    return( $shock_url );
+   }
+
+
 #END_HEADER
 
 sub new
@@ -383,7 +415,7 @@ sub genbank_to_genome
 
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", "https://ci.kbase.us/services/shock-api","--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
+    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", determine_relevant_shock_url(), "--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
     my $rc = system(@cmd);
 
 
@@ -518,7 +550,7 @@ sub fasta_to_contig
 #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
 system ("ls /data/bulktest/");
 #my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
-my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
+my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  " . determine_relevant_shock_url() . " --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
 print "cmd is ", Dumper( $cmd );
 system $cmd;
 #################################
@@ -887,7 +919,7 @@ sub reads_to_assembly
     my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type",
     "-t", $reads_type, "-f",$file_path->[0],
     "-o","/kb/module/work/tmp/Genomes/pereads.json",
-    "--shock_service_url","http://ci.kbase.us/services/shock-api",
+    "--shock_service_url", determine_relevant_shock_url(),
     "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
 
     push( @cmd, "-f", $file_path->[1], ) if ( @$file_path == 2 );
@@ -1101,7 +1133,7 @@ sub sra_reads_to_assembly
 
     my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type,
                 "-o","/kb/module/work/tmp/Genomes/pereads.json",
-                "--shock_service_url","http://ci.kbase.us/services/shock-api",
+                "--shock_service_url", determine_relevant_shock_url(),
                 "--handle_service_url","https://ci.kbase.us/services/handle_service",
                 "--outward", 0,
                 "-f", $fq_files[0]
