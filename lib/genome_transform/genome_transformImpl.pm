@@ -188,20 +188,25 @@ sub  die_if_unsupported
 # system_and_check( $cmd)
 #    issue system( $cmd ) then check for error retur
 
-sub  system_and_check
-   {
-    my $cmd = shift;
-    print "system_and_check [$cmd]\n";
-    system( $cmd );
-    if ( $? == -1 )
-       {  die "$cmd failed to execute: $!\n";  }
-    elsif ( $? & 127 )
-       {  printf STDERR "$cmd died with signal %d, %s coredump\n",
-               ($? & 127), ($? & 128 ) ? "with" : "without";
-          die "$0 terminating\n";
-       }
-    #print "### looks like successful return\n";
-   }
+sub  system_and_check                                                          
+   {                                                                           
+    my $cmd = shift;                                                           
+    print "system_and_check [$cmd]\n";                                         
+    if ( system( $cmd ) != 0 )                                                 
+       {                                                                       
+        if ( $? == -1 )                                                        
+           {  die "system() cmd failed to execute: $!\n";  }                           
+        elsif ( $? & 127 )                                                     
+           {  printf STDERR "system() cmd died with signal %d, %s coredump\n",         
+                   ($? & 127), ($? & 128 ) ? "with" : "without";               
+           }                                                                   
+        else                                                                   
+           {  printf STDERR "system() cmd exited with value %d\n", $? >> 8;  }         
+        die "$0 terminating\n";                                                
+       }                                                                       
+    #print "### looks like successful return\n";                               
+   }                                                                           
+
 
 # convert_sra( $filename, $type)
 #    $filename is SRA filename (string)
@@ -410,19 +415,16 @@ sub genbank_to_genome
     $file_path = decompress_if_needed( $file_path );
 
 
-################################
-
-
+    ################################
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
     my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", determine_relevant_shock_url(), "--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
-    my $rc = system(@cmd);
+    my $rc = system_and_check( join( " ", @cmd ) );
 
-
-#system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
-#my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
-#system $cmd;
-#################################
+    #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
+    #my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+    #system $cmd;
+    #################################
 
     #$return = {'file path input hash' => $genome_id};
     $return = $genome_id;
@@ -545,50 +547,50 @@ sub fasta_to_contig
     $file_path = decompress_if_needed( $file_path );
 
 
-################################
-#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-system ("ls /data/bulktest/");
-#my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
-my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  " . determine_relevant_shock_url() . " --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
-print "cmd is ", Dumper( $cmd );
-system $cmd;
-#################################
-
-my $json;
-{
-  local $/; #Enable 'slurp' mode
-  open my $fh, "<", "/kb/module/work/tmp/Genomes/$contig_id";
-  $json = <$fh>;
-  close $fh;
-}
-#print &Dumper ($json);
-#die;
-
-my $contig_set = decode_json($json);
-
-
-    my $obj_info_list = undef;
-        eval {
-            $obj_info_list = $wsClient->save_objects({
-                'workspace'=>$workspace,
-                'objects'=>[{
-                'type'=>'KBaseGenomes.ContigSet',
-                'data'=>$contig_set,
-                'name'=>$genome_id,
-                'provenance'=>$provenance
-
-            }]
-        });
-    };
-    if ($@) {
-        die "Error saving modified genome object to workspace:\n".$@;
+    ################################
+    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+    system ("ls /data/bulktest/");
+    #my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
+    my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  " . determine_relevant_shock_url() . " --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
+    print "cmd is ", Dumper( $cmd );
+    system_and_check( $cmd );
+    #################################
+    
+    my $json;
+    {
+      local $/; #Enable 'slurp' mode
+      open my $fh, "<", "/kb/module/work/tmp/Genomes/$contig_id";
+      $json = <$fh>;
+      close $fh;
     }
+    #print &Dumper ($json);
+    #die;
 
-    #$return = {'file path input hash' => $genome_id};
+    my $contig_set = decode_json($json);
+    eval {  $contig_set = decode_json($json);  };
+    if ( $@ )
+       { print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  }
+    else
+       {
+        my $obj_info_list = undef;
+        eval {
+              $obj_info_list = $wsClient->save_objects({
+                 'workspace'=>$workspace,
+                 'objects'=>[{
+                              'type'=>'KBaseGenomes.ContigSet',
+                              'data'=>$contig_set,
+                              'name'=>$genome_id,
+                              'provenance'=>$provenance
+                            }]
+               });
+             };
+        if ( $@ ) 
+           {  die "Error saving modified genome object to workspace:\n".$@;  }
 
-    $return = $genome_id;
-
+        #$return = {'file path input hash' => $genome_id};
+        $return = $genome_id;
+       }
 
     #END fasta_to_contig
     my @_bad_returns;
@@ -721,29 +723,36 @@ my $std = 60+0;
 
     $file_path = decompress_if_needed( $file_path );
 
-#my $expDirTest = "$expDir";
-################################
-#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-#system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-system ("ls /data/bulktest/");
-#my $cmd = q{/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory $expDirTest};
-system ("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory  $expDir ");
+    #my $expDirTest = "$expDir";
+    ################################
+    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
+    system ("ls /data/bulktest/");
+    #my $cmd = q{/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory $expDirTest};
+    system_and_check("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory  $expDir ");
+    #system $cmd;
+    #################################
 
-#system $cmd;
-#################################
-my $json;
+    my $json;
+    {
+      local $/; #Enable 'slurp' mode
+      open my $fh, "<", "/kb/module/work/tmp/Genomes/$exp_id";
+      $json = <$fh>;
+      close $fh;
+    }
 
-{
-  local $/; #Enable 'slurp' mode
-  open my $fh, "<", "/kb/module/work/tmp/Genomes/$exp_id";
-  $json = <$fh>;
-  close $fh;
-}
+    my $exp_ob;
 
-my $exp_ob = decode_json($json);
-    #print &Dumper ($exp_ob);
+    eval { $exp_ob = decode_json( $json ); };
+    if ( $@ )
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+    else
+       {
+        print "decode_json succeed:", Dumper ($exp_ob);   
 
-    my $obj_info_list = undef;
+        print "\n\n saving the object into the workspace\n";
+
+        my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
                 'workspace'=>$workspace,
@@ -755,10 +764,11 @@ my $exp_ob = decode_json($json);
                 }]
             });
         };
-    if ($@) {
-        die "Error saving modified genome object to workspace:\n".$@;
-    }
-     print &Dumper ($obj_info_list);
+        if ($@) {
+            die "Error saving modified genome object to workspace:\n".$@;
+           }
+         print &Dumper ($obj_info_list);
+       }
     return $exp_id;
     #END tsv_to_exp
     my @_bad_returns;
@@ -924,7 +934,8 @@ sub reads_to_assembly
 
     push( @cmd, "-f", $file_path->[1], ) if ( @$file_path == 2 );
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my $rc = system(@cmd);
+    #my $rc = system(@cmd);
+    my $rc = system_and_check( join( " ", @cmd ) );
 
     my $handle_type;
     if ( $reads_type eq 'SingleEndLibrary' ){
@@ -946,13 +957,18 @@ sub reads_to_assembly
         $json = <$fh>;
         close $fh;
     }
+    my $ro;
 
-    my $ro = decode_json($json);
-    print &Dumper ($ro);
+    eval { $ro = decode_json( $json ); };
+    if ( $@ )
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+    else
+       {
+        print "decode_json succeed:", Dumper ($ro);   
 
-  print "\n\n saving the object into the workspace\n";
+        print "\n\n saving the object into the workspace\n";
 
-  my $obj_info_list = undef;
+        my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
                 'workspace'=>$workspace,
@@ -964,14 +980,15 @@ sub reads_to_assembly
                 'meta'=>$RNASeqSampleSetMeta
                 }]
             });
-        };
-    if ($@) {
-        die "Error saving modified genome object to workspace:\n".$@;
-    }
+          };
+        if ($@) {
+           die "Error saving modified genome object to workspace:\n".$@;
+        }
 
-    my $robj=$wsClient->get_objects([{workspace=>$workspace, name=>$reads_id}])->[0];
+        my $robj=$wsClient->get_objects([{workspace=>$workspace, name=>$reads_id}])->[0];
 
-    $return = $obj_info_list->[0]->[6]."/".$obj_info_list->[0]->[0]."/".$obj_info_list->[0]->[4];
+        $return = $obj_info_list->[0]->[6]."/".$obj_info_list->[0]->[0]."/".$obj_info_list->[0]->[4];
+       }
     #print &Dumper ($robj);
 
     #END reads_to_assembly
@@ -1142,7 +1159,8 @@ sub sra_reads_to_assembly
     #print "transform command is ", join( " ", @cmd ), "\n";
 
     # run the transform script (same as with reads_to_assembly() )
-    my $rc = system(@cmd);
+
+    my $rc = system_and_check( join( " ", @cmd ) );
 
     my $json;
     {
@@ -1154,16 +1172,22 @@ sub sra_reads_to_assembly
         #print "json is\n$json\n";
     }
 
-    my $ro = decode_json($json);
-    print &Dumper ($ro);
+    my $ro;
 
-    my $handle_type = 'KBaseAssembly.PairedEndLibrary';
-    if ( $reads_type eq 'SingleEndLibrary' )
-       {  $handle_type = 'KBaseAssembly.SingleEndLibrary'; }
+    eval { $ro = decode_json( $json ); };
+    if ( $@ )
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+    else
+       {
+        print "decode_json succeed:", Dumper ($ro);   
 
-    print "\n\n saving the object, handle type [$handle_type], into the workspace\n";
+        my $handle_type = 'KBaseAssembly.PairedEndLibrary';
+        if ( $reads_type eq 'SingleEndLibrary' )
+           {  $handle_type = 'KBaseAssembly.SingleEndLibrary'; }
 
-    my $obj_info_list = undef;
+        print "\n\n saving the object, handle type [$handle_type], into the workspace\n";
+
+        my $obj_info_list = undef;
         eval {
             $obj_info_list = $wsClient->save_objects({
                 'workspace'=>$workspace,
@@ -1175,13 +1199,14 @@ sub sra_reads_to_assembly
                 }]
             });
         };
-    if ($@) {
-        #print "Error saving modified genome object to workspace:\n", $@;
-        die "Error saving modified genome object to workspace:\n".$@;
-    }
+        if ($@) {
+            #print "Error saving modified genome object to workspace:\n", $@;
+            die "Error saving modified genome object to workspace:\n".$@;
+        }
 
-    $return = $reads_id;
-    #print &Dumper ($obj_info_list);
+        $return = $reads_id;
+        #print &Dumper ($obj_info_list);
+      }
     print "\n\nending SRA reads to assembly method.....\n\n";
 
     #END sra_reads_to_assembly
