@@ -265,7 +265,7 @@ sub  determine_relevant_shock_url
     # if running on DTN AWE, use the direct connection.  This is required for large files
     # since the nginx proxy complains if the file is too big.
 
-    if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload") )
+    if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload" )
        {
         if ( $is_CI )
            {  $shock_url = 'http://ci05.kbase.lbl.gov:7044';  }
