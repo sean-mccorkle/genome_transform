@@ -188,24 +188,24 @@ sub  die_if_unsupported
 # system_and_check( $cmd)
 #    issue system( $cmd ) then check for error retur
 
-sub  system_and_check                                                          
-   {                                                                           
-    my $cmd = shift;                                                           
-    print "system_and_check [$cmd]\n";                                         
-    if ( system( $cmd ) != 0 )                                                 
-       {                                                                       
-        if ( $? == -1 )                                                        
-           {  die "system() cmd failed to execute: $!\n";  }                           
-        elsif ( $? & 127 )                                                     
-           {  printf STDERR "system() cmd died with signal %d, %s coredump\n",         
-                   ($? & 127), ($? & 128 ) ? "with" : "without";               
-           }                                                                   
-        else                                                                   
-           {  printf STDERR "system() cmd exited with value %d\n", $? >> 8;  }         
-        die "$0 terminating\n";                                                
-       }                                                                       
-    #print "### looks like successful return\n";                               
-   }                                                                           
+sub  system_and_check
+   {
+    my $cmd = shift;
+    print "system_and_check [$cmd]\n";
+    if ( system( $cmd ) != 0 )
+       {
+        if ( $? == -1 )
+           {  die "system() cmd failed to execute: $!\n";  }
+        elsif ( $? & 127 )
+           {  printf STDERR "system() cmd died with signal %d, %s coredump\n",
+                   ($? & 127), ($? & 128 ) ? "with" : "without";
+           }
+        else
+           {  printf STDERR "system() cmd exited with value %d\n", $? >> 8;  }
+        die "$0 terminating\n";
+       }
+    #print "### looks like successful return\n";
+   }
 
 
 # convert_sra( $filename, $type)
@@ -251,32 +251,35 @@ sub  convert_sra
        { die "$0: convert_sra() did not get correct type:  '$type' should be either 'SingleEndLibrary' or 'PairedEndLibrary'.\n";}
    }
 
-# $shock_url = determine_relevant_shock_url() is invoked by various methods below to determine 
+# $shock_url = determine_relevant_shock_url() is invoked by various methods below to determine
 # URL for fastq uploads to shock based on the runtime environment.   We want to use the direct
 # http: url to the shock server because the nginx proxy won't handle extremely large files,
-# but the direct URL won't work for docker container testing.  
+# but the direct URL won't work for docker container testing.
 #
 
 sub  determine_relevant_shock_url
    {
-    my $is_CI = 1;   # modify this to determine the environment
-    my $shock_url;
+    my $self = shift;
+    my $shock_url = $self->{'shock-url'};
 
+=head
     if ( $is_CI )
        {  $shock_url = 'https://ci.kbase.us/services/shock-api';  } # default to regular CI shock proxy
-    else        
+    else
        {  $shock_url = 'https://kbase.us/services/shock-api';  } # default to regular production shock proxy
 
     # if running on DTN AWE, use the direct connection.  This is required for large files
     # since the nginx proxy complains if the file is too big.
+    my $is_CI = 1;   # modify this to determine the environment
 
     if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload" )
        {
         if ( $is_CI )
            {  $shock_url = 'http://ci05.kbase.lbl.gov:7044';  }
         else
-           {  $shock_url = 'http://shock.kbase.us:7044';  }   # get real name for this 
+           {  $shock_url = 'http://shock.kbase.us:7044';  }   # get real name for this
        }
+=cut
     print "relevant shock URL is [$shock_url]\n";
 
     return( $shock_url );
@@ -297,8 +300,14 @@ sub new
     my $cfg = Config::IniFiles->new(-file=>$config_file);
     my $wsInstance = $cfg->val('genome_transform','workspace-url');
     die "no workspace-url defined" unless $wsInstance;
+    my $ShockInstance = $cfg->val('genome_transform','shock-url');
+    die "no shock-url defined" unless $ShockInstance;
+    my $HandleInstance = $cfg->val('genome_transform','handle-service-url');
+    die "no handle-service-url defined" unless $HandleInstance;
 
     $self->{'workspace-url'} = $wsInstance;
+    $self->{'shock-url'} = $ShockInstance;
+    $self->{'handle-service-url'} = $HandleInstance;
 
     #END_CONSTRUCTOR
 
@@ -418,7 +427,14 @@ sub genbank_to_genome
     ################################
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome","--shock_service_url", determine_relevant_shock_url(), "--workspace_service_url", "https://ci.kbase.us/services/ws", "--workspace_name", $workspace, "--object_name", $genome_id, "--contigset_object_name", $contig_id, "--input_directory",$file_path,  "--working_directory", "/kb/module/work/tmp/Genomes");
+    my @cmd = ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome",
+               "--shock_service_url", determine_relevant_shock_url($self),
+               "--workspace_service_url", $self->{'workspace-url'},
+               "--workspace_name", $workspace,
+               "--object_name", $genome_id,
+               "--contigset_object_name", $contig_id,
+               "--input_directory",$file_path,
+               "--working_directory", "/kb/module/work/tmp/Genomes");
     my $rc = system_and_check( join( " ", @cmd ) );
 
     #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
@@ -523,7 +539,7 @@ sub fasta_to_contig
     my $workspace = $fasta_to_contig_params->{workspace};
     my $genome_id = $fasta_to_contig_params->{genome_id};
     my $contig_id = $fasta_to_contig_params->{contigset_id};
-     print &Dumper ($fasta_to_contig_params);
+    print &Dumper ($fasta_to_contig_params);
     my $tmpDir = "/kb/module/work/tmp";
     my $expDir = "/kb/module/work/tmp/Genomes";
 
@@ -542,21 +558,11 @@ sub fasta_to_contig
         print "creating a tmp/Genomes direcotory for data processing, continuing..\n";
 }
 
-    #$contig_id = $contig_id."";
-
     $file_path = decompress_if_needed( $file_path );
-
-
-    ################################
-    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-    #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-    system ("ls /data/bulktest/");
-    #my $cmd = q{/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  https://ci.kbase.us/services/shock-api   --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
-    my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  " . determine_relevant_shock_url() . " --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
+    my $cmd = "/kb/deployment/bin/trns_transform_FASTA_DNA_Assembly_to_KBaseGenomes_ContigSet  --shock_service_url  " . determine_relevant_shock_url($self) . " --output_file_name $contig_id  --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes";
     print "cmd is ", Dumper( $cmd );
     system_and_check( $cmd );
-    #################################
-    
+
     my $json;
     {
       local $/; #Enable 'slurp' mode
@@ -585,7 +591,7 @@ sub fasta_to_contig
                             }]
                });
              };
-        if ( $@ ) 
+        if ( $@ )
            {  die "Error saving modified genome object to workspace:\n".$@;  }
 
         #$return = {'file path input hash' => $genome_id};
@@ -727,7 +733,7 @@ my $std = 60+0;
     ################################
     #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url http://ci.kbase.us/services/ws --workspace_name  "janakakbase:1455821214132" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
     #system ('/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name  "janakakbase:1464032798535" --object_name NC_003197 --contigset_object_name  ContigNC_003197 --input_directory /kb/module/data/NC_003197.gbk --working_directory /kb/module/workdir/tmp/Genomes');
-    system ("ls /data/bulktest/");
+    #system ("ls /data/bulktest/");
     #my $cmd = q{/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory $expDirTest};
     system_and_check("/kb/deployment/bin/trns_transform_TSV_Exspression_to_KBaseFeatureValues_ExpressionMatrix  --workspace_service_url https://ci.kbase.us/services/ws  --workspace_name $workspace  --object_name $genome_id   --output_file_name  $exp_id --input_directory $file_path  --working_directory  $expDir ");
     #system $cmd;
@@ -745,10 +751,10 @@ my $std = 60+0;
 
     eval { $exp_ob = decode_json( $json ); };
     if ( $@ )
-       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  }
     else
        {
-        print "decode_json succeed:", Dumper ($exp_ob);   
+        print "decode_json succeed:", Dumper ($exp_ob);
 
         print "\n\n saving the object into the workspace\n";
 
@@ -914,27 +920,24 @@ sub reads_to_assembly
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
     }
 
-    my $filep1 = "/kb/module/data/frag_1.fastq";
-    my $filep2 = "/kb/module/data/frag_2.fastq";
+    #For debug purposes
+    #my $filep1 = "/kb/module/data/frag_1.fastq";
+    #my $filep2 = "/kb/module/data/frag_2.fastq";
 
     # decompress any gz or bzip2 files - capture new names of files in
     # the process
     foreach my $i ( 0..$#{$file_path} )
         { $file_path->[$i] = decompress_if_needed( $file_path->[$i] ); }
 
-
-    system ("ls data/bulktest/janakakbase/");
-
-
     my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type",
-    "-t", $reads_type, "-f",$file_path->[0],
-    "-o","/kb/module/work/tmp/Genomes/pereads.json",
-    "--shock_service_url", determine_relevant_shock_url(),
-    "--handle_service_url","https://ci.kbase.us/services/handle_service", "--outward",0 );
+               "-t", $reads_type,
+               "-f",$file_path->[0],
+               "-o","/kb/module/work/tmp/Genomes/pereads.json",
+               "--shock_service_url", determine_relevant_shock_url($self),
+               "--handle_service_url", $self->{'handle-service-url'},
+               "--outward",0 );
 
     push( @cmd, "-f", $file_path->[1], ) if ( @$file_path == 2 );
-    #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
-    #my $rc = system(@cmd);
     my $rc = system_and_check( join( " ", @cmd ) );
 
     my $handle_type;
@@ -961,10 +964,10 @@ sub reads_to_assembly
 
     eval { $ro = decode_json( $json ); };
     if ( $@ )
-       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  }
     else
        {
-        print "decode_json succeed:", Dumper ($ro);   
+        print "decode_json succeed:", Dumper ($ro);
 
         print "\n\n saving the object into the workspace\n";
 
@@ -1134,15 +1137,12 @@ sub sra_reads_to_assembly
        }
 
     chdir( $tmpDir ) || die "Can't chdir to $tmpDir: $!\n";
-    system ("ls /kb/module/data/");
-    #print "before convert_sra( ", $file_path->[0], ", ", $reads_type, ") current directory contents are\n";
-    system( "ls");
 
     $file_path->[0] = decompress_if_needed( $file_path->[0] );
 
     my @fq_files = convert_sra( $file_path->[0], $reads_type );   # convert
     print "after convert_sra( ", $file_path->[0], ", ", $reads_type, "), result fq_files are ", join( ",", @fq_files), "\n";
-    system( "ls");
+    #system( "ls");
 
     # there may be one or two fastq files resultant from the SRA conversion, depending on
     # whether or not this is a single or paired end library.  Construct the transform script
@@ -1150,8 +1150,8 @@ sub sra_reads_to_assembly
 
     my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type,
                 "-o","/kb/module/work/tmp/Genomes/pereads.json",
-                "--shock_service_url", determine_relevant_shock_url(),
-                "--handle_service_url","https://ci.kbase.us/services/handle_service",
+                "--shock_service_url", determine_relevant_shock_url($self),
+                "--handle_service_url", $self->{'handle-service-url'},
                 "--outward", 0,
                 "-f", $fq_files[0]
                 );
@@ -1176,10 +1176,10 @@ sub sra_reads_to_assembly
 
     eval { $ro = decode_json( $json ); };
     if ( $@ )
-       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  } 
+       {  print STDERR "decode_json failed: $@\njson is ", Dumper( $json );  }
     else
        {
-        print "decode_json succeed:", Dumper ($ro);   
+        print "decode_json succeed:", Dumper ($ro);
 
         my $handle_type = 'KBaseAssembly.PairedEndLibrary';
         if ( $reads_type eq 'SingleEndLibrary' )
