@@ -24,10 +24,14 @@ RUN cd /kb/dev_container/modules && \
 # Get perl MMagic library for identifying compressed types
 RUN cpanm File::MMagic
 
+# Get LWP::UserAgent and HTTP::Request needed for handling shock-service redirect
+RUN cpanm HTTP::Request
+RUN cpanm LWP::UserAgent
+
 # Get NCBI SRATools (for fastq-dump)
 RUN cd /kb/dev_container/modules && \
     mkdir NCBI_SRA_tools && cd NCBI_SRA_tools && \
-    curl 'http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.7.0/sratoolkit.2.7.0-ubuntu64.tar.gz' -O && \
+    curl 'https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.7.0/sratoolkit.2.7.0-ubuntu64.tar.gz' -O && \
     tar zxf sratoolkit.2.7.0-ubuntu64.tar.gz && \
     cp sratoolkit.2.7.0-ubuntu64/bin/fastq-dump.2.7.0  /kb/deployment/bin/fastq-dump
 

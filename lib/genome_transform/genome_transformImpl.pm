@@ -33,6 +33,8 @@ use File::Copy::Recursive qw( dircopy );
 use File::MMagic;      # needs to be added to container via Dockerfile
                        # required by decompress_if_needed()
 use File::Path;
+use HTTP::Request;     # these two used for direct shock url from
+use LWP::UserAgent;    # 302 redirect
 
 binmode STDOUT, ":utf8";
 
@@ -186,7 +188,7 @@ sub  die_if_unsupported
 #
 
 # system_and_check( $cmd)
-#    issue system( $cmd ) then check for error retur
+#    issue system( $cmd ) then check for error return
 
 sub  system_and_check
    {
@@ -262,24 +264,25 @@ sub  determine_relevant_shock_url
     my $self = shift;
     my $shock_url = $self->{'shock-url'};
 
-=head
-    if ( $is_CI )
-       {  $shock_url = 'https://ci.kbase.us/services/shock-api';  } # default to regular CI shock proxy
-    else
-       {  $shock_url = 'https://kbase.us/services/shock-api';  } # default to regular production shock proxy
-
     # if running on DTN AWE, use the direct connection.  This is required for large files
     # since the nginx proxy complains if the file is too big.
-    my $is_CI = 1;   # modify this to determine the environment
 
     if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload" )
        {
-        if ( $is_CI )
-           {  $shock_url = 'http://ci05.kbase.lbl.gov:7044';  }
+        my $shock_direct = $shock_url;                 # create shock-direct url based on
+        $shock_direct =~ s/shock-api/shock-direct/;    # current shock url
+        my $ua = LWP::UserAgent->new;
+        my $req = HTTP::Request->new( GET=>$shock_direct );
+        my $res = $ua->request( $req );
+        if ( $res->is_success && $res->previous )
+            { 
+              print $req->url, ' redirected to ', $res->request->uri, "\n"; 
+              $shock_url = $res->request->uri;
+            }
         else
-           {  $shock_url = 'http://shock.kbase.us:7044';  }   # get real name for this
+            { print $req->url, ": not redirected\n"; }
        }
-=cut
+
     print "relevant shock URL is [$shock_url]\n";
 
     return( $shock_url );
