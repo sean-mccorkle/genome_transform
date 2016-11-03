@@ -275,8 +275,8 @@ sub  determine_relevant_shock_url
         my $req = HTTP::Request->new( GET=>$shock_direct );
         my $res = $ua->request( $req );
         if ( $res->is_success && $res->previous )
-            { 
-              print $req->url, ' redirected to ', $res->request->uri, "\n"; 
+            {
+              print $req->url, ' redirected to ', $res->request->uri, "\n";
               $shock_url = $res->request->uri;
             }
         else
@@ -400,7 +400,6 @@ sub genbank_to_genome
 
     print $genbank_to_genome_params->{genbank_file_path};
     print &Dumper ($genbank_to_genome_params);
-
     my $file_path = $genbank_to_genome_params->{genbank_file_path};
     my $workspace = $genbank_to_genome_params->{workspace};
     my $genome_id = $genbank_to_genome_params->{genome_id};
@@ -413,20 +412,15 @@ sub genbank_to_genome
     my $expDir = "/kb/module/work/tmp/Genomes";
 
     if (-d $expDir){
-
         print "temp/Genome directory exists, continuing..\n";
     }
     else{
-
         mkpath([$tmpDir], 1);
         mkpath([$expDir], 1);
         print "creating a temp/expDir direcotory for data processing, continuing..\n";
     }
 
-
     $file_path = decompress_if_needed( $file_path );
-
-
     ################################
 
     #my @cmd = ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type", "-t", $reads_type, "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_1.fastq", "-f","/data/bulktest/data/bulktest/janakakbase/reads/frag_2.fastq", "-o","/kb/module/work/tmp/Genomes/pereads.json", "--shock_service_url","http://ci.kbase.us/services/shock-api", "--handle_service_url","https://ci.kbase.us/services/handle_service");
@@ -439,7 +433,6 @@ sub genbank_to_genome
                "--input_directory",$file_path,
                "--working_directory", "/kb/module/work/tmp/Genomes");
     my $rc = system_and_check( join( " ", @cmd ) );
-
     #system ("/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://appdev.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes");
     #my $cmd = q{/kb/deployment/bin/trns_transform_Genbank_Genome_to_KBaseGenomes_Genome  --shock_service_url  https://ci.kbase.us/services/shock-api --workspace_service_url https://ci.kbase.us/services/ws --workspace_name $workspace  --object_name $genome_id   --contigset_object_name  $contig_id --input_directory $file_path  --working_directory /kb/module/work/tmp/Genomes};
     #system $cmd;
@@ -547,11 +540,9 @@ sub fasta_to_contig
     my $expDir = "/kb/module/work/tmp/Genomes";
 
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
-    print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
-
+    #print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
 
     if (-d $expDir){
-
         print "temp directory exists, continuing..\n";
     }
     else{
@@ -705,26 +696,19 @@ my $insert_size = 300+0;
 my $std = 60+0;
 #system ("/kb/deployment/bin/trns_transform_seqs_to_KBaseAssembly_type -t PairedEndLibrary  -f /kb/module/data/frag_1.fastq -f /kb/module/data/frag_2.fastq  -o /kb/module/work/tmp/GenomesData/pereads.json --shock_service_url http://ci.kbase.us/services/shock-api --handle_service_url https://ci.kbase.us/services/handle_service");
 #system ("cat /kb/module/work/tmp/GenomesData/pe.reads.json");
-
-
 #########################################################
 
     if($expDir =~ m/\s+/g)#check for space
          {
           $expDir =~ s/\s+/\\ /g;#replace space by slash
          }
-
-
     my $relative_fp = "/data/bulktest/data/bulktest/".$file_path;
-
     print "complete-file-path  $file_path\n relative-file-path $relative_fp\n\n";
 
     if (-d $expDir){
-
         print "temp/Genomes directory exists, continuing..\n";
     }
     else{
-
         mkpath([$tmpDir], 1);
         mkpath([$expDir], 1);
         print "creating a temp/Genomes direcotory for data processing, continuing..\n";
@@ -1387,19 +1371,14 @@ sub rna_sample_set
             $num_replicates++;
           }
            else{
-
             print "Reads id $r->{reads_id} did not upload properly into the narrative and will not be included in the RnaSeq Sample Set\n";
             next;
           }
       }
       else{
-
         print "reads classification (sra or none-sra) not given, moving to next read set..\n";
         next;
       }
-
-
-
     }
 
     print "$num_samples reads samples uploaded \n";
