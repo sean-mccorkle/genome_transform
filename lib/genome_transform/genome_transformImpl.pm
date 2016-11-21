@@ -267,6 +267,7 @@ sub  determine_relevant_shock_url
     # if running on DTN AWE, use the direct connection.  This is required for large files
     # since the nginx proxy complains if the file is too big.
 
+    print "in determine_relevant_shock_url, AWE_CLIENTGROUP is [", $ENV{'AWE_CLIENTGROUP'} , "]\n";
     if ( $ENV{'AWE_CLIENTGROUP'} eq "kb_upload" )
        {
         my $shock_direct = $shock_url;                 # create shock-direct url based on
